@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Array Adventure 🌟</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+:root {
+  --sky: #5B9EF5;
+  --sky-light: #EBF3FF;
+  --sun: #FFB830;
+  --sun-light: #FFF4D6;
+  --grass: #4DC87A;
+  --grass-light: #E6FAF0;
+  --berry: #F56B8A;
+  --berry-light: #FFF0F3;
+  --purple: #9B6EF3;
+  --purple-light: #F3EEFF;
+  --bg: #F7F9FF;
+  --card: #FFFFFF;
+  --text: #1E1E2E;
+  --muted: #8892A4;
+  --radius: 20px;
+  --shadow: 0 4px 20px rgba(91,158,245,0.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── HOME ── */
+#home {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: linear-gradient(160deg, #EBF3FF 0%, #F7F9FF 60%);
+  text-align: center;
+  gap: 0;
+}
+.hero-emoji { font-size: 88px; margin-bottom: 8px; animation: bob 2.4s ease-in-out infinite; }
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.home-title { font-size: 38px; font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
+.home-title span { color: var(--sky); }
+.home-sub { font-size: 16px; color: var(--muted); font-weight: 600; margin-bottom: 40px; }
+
+.mode-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 380px; }
+.mode-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform .15s, border-color .15s, box-shadow .15s;
+  text-align: left;
+}
+.mode-card:active { transform: scale(.97); }
+.mode-card.sky   { border-color: var(--sky); }
+.mode-card.sun   { border-color: var(--sun); }
+.mode-card.grass { border-color: var(--grass); }
+.mode-icon { font-size: 40px; flex-shrink: 0; }
+.mode-info h3 { font-size: 18px; font-weight: 900; }
+.mode-info p  { font-size: 13px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+
+/* ── GAME HEADER ── */
+.game-header {
+  background: var(--card);
+  padding: 14px 20px 12px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  position: sticky; top: 0; z-index: 10;
+}
+.back-btn {
+  background: var(--sky-light); border: none; border-radius: 12px;
+  width: 38px; height: 38px; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.game-title { font-size: 16px; font-weight: 900; flex: 1; }
+.score-pill {
+  background: var(--sun-light); border-radius: 20px;
+  padding: 5px 12px; font-size: 14px; font-weight: 800; color: #B8860B;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* progress bar */
+.progress-wrap { padding: 10px 20px 0; background: var(--card); }
+.progress-bar { height: 8px; background: #E8EDFB; border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sky), var(--purple)); border-radius: 99px; transition: width .5s ease; }
+.progress-label { font-size: 12px; color: var(--muted); font-weight: 700; text-align: right; padding: 4px 0 8px; }
+
+/* ── QUESTION AREA ── */
+.question-area { flex: 1; padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 18px; }
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  box-shadow: var(--shadow);
+}
+.question-card .q-label { font-size: 13px; font-weight: 800; color: var(--sky); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.question-card .q-text  { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.3; }
+.question-card .q-sub   { font-size: 14px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+
+/* Array display */
+.array-display { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.array-dot {
+  width: 26px; height: 26px; border-radius: 50%;
+  transition: transform .2s;
+}
+.array-dot.sky    { background: var(--sky); }
+.array-dot.sun    { background: var(--sun); }
+.array-dot.grass  { background: var(--grass); }
+.array-dot.berry  { background: var(--berry); }
+.array-dot.purple { background: var(--purple); }
+
+.array-row { display: flex; gap: 6px; }
+
+/* Options grid */
+.options-grid { display: flex; flex-direction: column; gap: 12px; }
+.option-btn {
+  background: var(--card);
+  border: 3px solid #E8EDFB;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px; font-weight: 800;
+  color: var(--text);
+  cursor: pointer;
+  display: flex; align-items: center; gap: 14px;
+  transition: border-color .15s, background .15s, transform .12s;
+  text-align: left;
+  width: 100%;
+}
+.option-btn:active { transform: scale(.98); }
+.option-btn.selected { border-color: var(--sky); background: var(--sky-light); }
+.option-btn.correct  { border-color: var(--grass); background: var(--grass-light); }
+.option-btn.wrong    { border-color: var(--berry); background: var(--berry-light); }
+
+.option-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--sky-light); color: var(--sky);
+  font-size: 15px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.option-btn.correct .option-dot { background: var(--grass); color: white; }
+.option-btn.wrong   .option-dot { background: var(--berry); color: white; }
+
+/* mini arrays in options */
+.mini-array { display: flex; flex-direction: column; gap: 4px; }
+.mini-row { display: flex; gap: 4px; }
+.mini-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--sky); opacity: .75; }
+
+/* feedback toast */
+.feedback-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--grass); color: white;
+  border-radius: 16px; padding: 14px 24px;
+  font-size: 16px; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(77,200,122,.35);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
+  opacity: 0; z-index: 100; white-space: nowrap;
+}
+.feedback-toast.wrong-toast { background: var(--berry); box-shadow: 0 8px 32px rgba(245,107,138,.35); }
+.feedback-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* next btn */
+.next-btn {
+  background: var(--sky);
+  color: white; border: none;
+  border-radius: 16px; padding: 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px; font-weight: 900;
+  cursor: pointer; width: 100%;
+  display: none; margin-top: 4px;
+  transition: opacity .2s, transform .12s;
+  box-shadow: 0 4px 16px rgba(91,158,245,.4);
+}
+.next-btn:active { transform: scale(.98); }
+.next-btn.visible { display: block; }
+
+/* ── RESULTS ── */
+#results {
+  align-items: center; justify-content: center;
+  padding: 40px 24px;
+  background: linear-gradient(160deg, #EBF3FF 0%, #F7F9FF 70%);
+  text-align: center; gap: 0;
+}
+.result-emoji { font-size: 96px; margin-bottom: 12px; }
+.result-title { font-size: 30px; font-weight: 900; margin-bottom: 6px; }
+.result-sub   { font-size: 16px; color: var(--muted); font-weight: 600; margin-bottom: 32px; }
+.stars-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
+.star { font-size: 48px; opacity: .2; transition: opacity .4s, transform .4s; }
+.star.lit { opacity: 1; transform: scale(1.15); }
+
+.result-card {
+  background: var(--card); border-radius: var(--radius);
+  padding: 20px 28px; width: 100%; max-width: 340px;
+  box-shadow: var(--shadow); margin-bottom: 28px;
+}
+.result-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+.result-stat + .result-stat { border-top: 1px solid #F0F3FA; }
+.result-stat .stat-label { font-size: 15px; font-weight: 700; color: var(--muted); }
+.result-stat .stat-value { font-size: 20px; font-weight: 900; color: var(--text); }
+
+.play-again-btn {
+  background: var(--sky); color: white; border: none;
+  border-radius: 16px; padding: 16px 40px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(91,158,245,.4);
+}
+.home-link-btn {
+  background: none; border: none;
+  color: var(--muted); font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  margin-top: 14px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div id="home" class="screen active">
+  <div class="hero-emoji">🎮</div>
+  <h1 class="home-title">Array<br><span>Adventure</span></h1>
+  <p class="home-sub">Pick a challenge to begin!</p>
+
+  <div class="mode-cards">
+    <div class="mode-card sky" onclick="startMode('match')">
+      <div class="mode-icon">🔗</div>
+      <div class="mode-info">
+        <h3>Match It!</h3>
+        <p>Connect the array to its description</p>
+      </div>
+    </div>
+    <div class="mode-card sun" onclick="startMode('circle')">
+      <div class="mode-icon">⭕</div>
+      <div class="mode-info">
+        <h3>Pick the Right Array</h3>
+        <p>Choose which array matches the multiplication</p>
+      </div>
+    </div>
+    <div class="mode-card grass" onclick="startMode('write')">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-info">
+        <h3>Read the Array</h3>
+        <p>Count rows and columns, then write the equation</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ GAME ══════════════════ -->
+<div id="game" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="game-title" id="game-title">Match It!</div>
+    <div class="score-pill">⭐ <span id="score-display">0</span></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">Question 1 of 8</div>
+  </div>
+  <div class="question-area" id="question-area"></div>
+</div>
+
+<!-- ══════════════════ RESULTS ══════════════════ -->
+<div id="results" class="screen">
+  <div class="result-emoji" id="result-emoji">🎉</div>
+  <div class="result-title" id="result-title">Amazing!</div>
+  <div class="result-sub" id="result-sub">You're an array superstar!</div>
+  <div class="stars-row">
+    <div class="star" id="star1">⭐</div>
+    <div class="star" id="star2">⭐</div>
+    <div class="star" id="star3">⭐</div>
+  </div>
+  <div class="result-card">
+    <div class="result-stat">
+      <span class="stat-label">Correct answers</span>
+      <span class="stat-value" id="res-correct">0</span>
+    </div>
+    <div class="result-stat">
+      <span class="stat-label">Total questions</span>
+      <span class="stat-value" id="res-total">0</span>
+    </div>
+    <div class="result-stat">
+      <span class="stat-label">Score</span>
+      <span class="stat-value" id="res-score">0 ⭐</span>
+    </div>
+  </div>
+  <button class="play-again-btn" id="play-again-btn">Play Again 🔁</button>
+  <button class="home-link-btn" onclick="goHome()">← Back to Home</button>
+</div>
+
+<!-- Feedback toast -->
+<div class="feedback-toast" id="toast">✅ Correct!</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const COLORS = ['sky','sun','grass','berry','purple'];
+
+const MATCH_QUESTIONS = [
+  { rows:3, cols:4, label:'3 groups of 4', emoji:'🥚', color:'sky' },
+  { rows:2, cols:6, label:'2 groups of 6', emoji:'🍪', color:'sun' },
+  { rows:5, cols:2, label:'5 groups of 2', emoji:'⭐', color:'grass' },
+  { rows:4, cols:3, label:'4 groups of 3', emoji:'🌸', color:'berry' },
+  { rows:3, cols:5, label:'3 groups of 5', emoji:'🍎', color:'purple' },
+  { rows:2, cols:8, label:'2 groups of 8', emoji:'🐛', color:'sky' },
+  { rows:6, cols:2, label:'6 groups of 2', emoji:'🎈', color:'sun' },
+  { rows:4, cols:5, label:'4 groups of 5', emoji:'🦋', color:'grass' },
+];
+
+const CIRCLE_QUESTIONS = [
+  {
+    mult: '3 × 4', rows: 3, cols: 4, answer: 0, color:'sky',
+    options: [
+      { rows:3, cols:4 },
+      { rows:2, cols:5 },
+      { rows:4, cols:3 }
+    ]
+  },
+  {
+    mult: '5 × 3', rows: 5, cols: 3, answer: 1, color:'berry',
+    options: [
+      { rows:3, cols:4 },
+      { rows:5, cols:3 },
+      { rows:3, cols:6 }
+    ]
+  },
+  {
+    mult: '2 × 8', rows: 2, cols: 8, answer: 2, color:'sun',
+    options: [
+      { rows:4, cols:4 },
+      { rows:3, cols:5 },
+      { rows:2, cols:8 }
+    ]
+  },
+  {
+    mult: '4 × 4', rows: 4, cols: 4, answer: 0, color:'purple',
+    options: [
+      { rows:4, cols:4 },
+      { rows:2, cols:8 },
+      { rows:8, cols:2 }
+    ]
+  },
+  {
+    mult: '6 × 2', rows: 6, cols: 2, answer: 1, color:'grass',
+    options: [
+      { rows:3, cols:4 },
+      { rows:6, cols:2 },
+      { rows:2, cols:6 }
+    ]
+  },
+  {
+    mult: '3 × 6', rows: 3, cols: 6, answer: 2, color:'sky',
+    options: [
+      { rows:6, cols:3 },
+      { rows:2, cols:9 },
+      { rows:3, cols:6 }
+    ]
+  },
+  {
+    mult: '5 × 4', rows: 5, cols: 4, answer: 0, color:'berry',
+    options: [
+      { rows:5, cols:4 },
+      { rows:4, cols:5 },
+      { rows:2, cols:10 }
+    ]
+  },
+  {
+    mult: '7 × 2', rows: 7, cols: 2, answer: 1, color:'sun',
+    options: [
+      { rows:2, cols:7 },
+      { rows:7, cols:2 },
+      { rows:4, cols:3 }
+    ]
+  },
+];
+
+const WRITE_QUESTIONS = [
+  { rows:3, cols:5, color:'purple', equation:'3 × 5 = 15', rowLabel:3, colLabel:5, total:15 },
+  { rows:4, cols:4, color:'sun',    equation:'4 × 4 = 16', rowLabel:4, colLabel:4, total:16 },
+  { rows:6, cols:3, color:'sky',    equation:'6 × 3 = 18', rowLabel:6, colLabel:3, total:18 },
+  { rows:2, cols:7, color:'grass',  equation:'2 × 7 = 14', rowLabel:2, colLabel:7, total:14 },
+  { rows:5, cols:5, color:'berry',  equation:'5 × 5 = 25', rowLabel:5, colLabel:5, total:25 },
+  { rows:3, cols:6, color:'purple', equation:'3 × 6 = 18', rowLabel:3, colLabel:6, total:18 },
+  { rows:4, cols:6, color:'sky',    equation:'4 × 6 = 24', rowLabel:4, colLabel:6, total:24 },
+  { rows:2, cols:9, color:'sun',    equation:'2 × 9 = 18', rowLabel:2, colLabel:9, total:18 },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentMode = '';
+let currentIndex = 0;
+let score = 0;
+let correctCount = 0;
+let answered = false;
+let questions = [];
+let matchSelected = null;  // for match mode
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goHome() { showScreen('home'); }
+
+function startMode(mode) {
+  currentMode = mode;
+  currentIndex = 0;
+  score = 0;
+  correctCount = 0;
+  answered = false;
+  matchSelected = null;
+
+  const titles = { match:'Match It! 🔗', circle:'Pick the Right Array ⭕', write:'Read the Array ✏️' };
+  document.getElementById('game-title').textContent = titles[mode];
+  document.getElementById('score-display').textContent = '0';
+
+  if (mode === 'match') questions = shuffle([...MATCH_QUESTIONS]);
+  else if (mode === 'circle') questions = shuffle([...CIRCLE_QUESTIONS]);
+  else questions = shuffle([...WRITE_QUESTIONS]);
+
+  showScreen('game');
+  renderQuestion();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderQuestion() {
+  answered = false;
+  matchSelected = null;
+  const q = questions[currentIndex];
+  const total = questions.length;
+  const pct = (currentIndex / total) * 100;
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Question ${currentIndex + 1} of ${total}`;
+  document.getElementById('score-display').textContent = score;
+
+  const area = document.getElementById('question-area');
+  area.innerHTML = '';
+
+  if (currentMode === 'match') renderMatch(area, q);
+  else if (currentMode === 'circle') renderCircle(area, q);
+  else renderWrite(area, q);
+}
+
+// ── MATCH MODE ────────────────────────────────────────────────────────────────
+function renderMatch(area, q) {
+  // Shuffle wrong labels pool
+  const all = MATCH_QUESTIONS.map(x => x.label);
+  const wrongs = shuffle(all.filter(l => l !== q.label)).slice(0,3);
+  const opts = shuffle([q.label, ...wrongs]);
+
+  area.innerHTML = `
+    <div class="question-card">
+      <div class="q-label">Match It!</div>
+      <div class="q-text">What is this array?</div>
+      <div class="q-sub">Count the rows and columns 👇</div>
+      <div style="margin-top:16px">${buildArrayHTML(q.rows, q.cols, q.color)}</div>
+    </div>
+    <div class="options-grid" id="opts"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+  `;
+
+  const grid = document.getElementById('opts');
+  const letters = ['A','B','C','D'];
+  opts.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.dataset.label = label;
+    btn.innerHTML = `<div class="option-dot">${letters[i]}</div><span>${label}</span>`;
+    btn.onclick = () => selectMatch(btn, label === q.label);
+    grid.appendChild(btn);
+  });
+}
+
+function selectMatch(btn, isCorrect) {
+  if (answered) return;
+  answered = true;
+  const allBtns = document.querySelectorAll('#opts .option-btn');
+  allBtns.forEach(b => {
+    if (b.dataset.label === questions[currentIndex].label) b.classList.add('correct');
+  });
+  if (isCorrect) {
+    btn.classList.add('correct');
+    btn.querySelector('.option-dot').textContent = '✓';
+    score += 10; correctCount++;
+    showToast('✅ Correct! +10', false);
+  } else {
+    btn.classList.add('wrong');
+    btn.querySelector('.option-dot').textContent = '✗';
+    showToast('❌ Not quite! Try again next time', true);
+  }
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('next-btn').classList.add('visible');
+}
+
+// ── CIRCLE MODE ───────────────────────────────────────────────────────────────
+function renderCircle(area, q) {
+  const letters = ['A','B','C'];
+  area.innerHTML = `
+    <div class="question-card">
+      <div class="q-label">Pick the Right Array</div>
+      <div class="q-text" style="font-size:28px">${q.mult}</div>
+      <div class="q-sub">Which array shows this multiplication?</div>
+    </div>
+    <div class="options-grid" id="opts"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+  `;
+
+  const grid = document.getElementById('opts');
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.dataset.idx = i;
+    btn.innerHTML = `
+      <div class="option-dot">${letters[i]}</div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px">${opt.rows} rows × ${opt.cols} columns</div>
+        ${buildMiniArrayHTML(opt.rows, opt.cols, q.color)}
+      </div>
+    `;
+    btn.onclick = () => selectCircle(btn, i === q.answer, i, q.answer);
+    grid.appendChild(btn);
+  });
+}
+
+function selectCircle(btn, isCorrect, chosen, correct) {
+  if (answered) return;
+  answered = true;
+  const allBtns = document.querySelectorAll('#opts .option-btn');
+  allBtns[correct].classList.add('correct');
+  allBtns[correct].querySelector('.option-dot').textContent = '✓';
+  if (!isCorrect) {
+    btn.classList.add('wrong');
+    btn.querySelector('.option-dot').textContent = '✗';
+    showToast('❌ Not quite! The correct one is highlighted', true);
+  } else {
+    score += 10; correctCount++;
+    showToast('✅ Correct! +10', false);
+  }
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('next-btn').classList.add('visible');
+}
+
+// ── WRITE MODE ────────────────────────────────────────────────────────────────
+function renderWrite(area, q) {
+  area.innerHTML = `
+    <div class="question-card">
+      <div class="q-label">Read the Array</div>
+      <div class="q-text">Count the rows and columns!</div>
+      <div class="q-sub">Then write the multiplication equation ✏️</div>
+      <div style="margin-top:16px">${buildArrayHTML(q.rows, q.cols, q.color)}</div>
+    </div>
+
+    <div class="question-card" style="gap:14px;display:flex;flex-direction:column">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Rows (↕)</div>
+          <input id="inp-rows" type="number" min="1" max="20" inputmode="numeric"
+            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
+            placeholder="?">
+        </div>
+        <div style="font-size:28px;font-weight:900;color:var(--muted);padding-top:20px">×</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Columns (↔)</div>
+          <input id="inp-cols" type="number" min="1" max="20" inputmode="numeric"
+            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
+            placeholder="?">
+        </div>
+        <div style="font-size:28px;font-weight:900;color:var(--muted);padding-top:20px">=</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Total</div>
+          <input id="inp-total" type="number" min="1" max="100" inputmode="numeric"
+            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
+            placeholder="?">
+        </div>
+      </div>
+      <button onclick="checkWrite(${q.rowLabel},${q.colLabel},${q.total})"
+        style="background:var(--purple);color:white;border:none;border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;width:100%">
+        Check ✓
+      </button>
+      <div id="write-feedback" style="display:none;text-align:center;font-size:15px;font-weight:700;padding:4px 0"></div>
+    </div>
+
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
+  `;
+}
+
+function checkWrite(correctRows, correctCols, correctTotal) {
+  if (answered) return;
+  const r = parseInt(document.getElementById('inp-rows').value);
+  const c = parseInt(document.getElementById('inp-cols').value);
+  const t = parseInt(document.getElementById('inp-total').value);
+
+  if (!r || !c || !t) {
+    showToast('⚠️ Fill in all three boxes!', true);
+    return;
+  }
+
+  answered = true;
+  const rowOk  = r === correctRows;
+  const colOk  = c === correctCols;
+  const totOk  = t === correctTotal;
+  const allOk  = rowOk && colOk && totOk;
+
+  // color inputs
+  const colorOk  = '#E6FAF0';
+  const colorBad = '#FFF0F3';
+  const inputRows  = document.getElementById('inp-rows');
+  const inputCols  = document.getElementById('inp-cols');
+  const inputTotal = document.getElementById('inp-total');
+
+  inputRows.style.borderColor  = rowOk ? 'var(--grass)' : 'var(--berry)';
+  inputRows.style.background   = rowOk ? colorOk : colorBad;
+  inputCols.style.borderColor  = colOk ? 'var(--grass)' : 'var(--berry)';
+  inputCols.style.background   = colOk ? colorOk : colorBad;
+  inputTotal.style.borderColor = totOk ? 'var(--grass)' : 'var(--berry)';
+  inputTotal.style.background  = totOk ? colorOk : colorBad;
+
+  const fb = document.getElementById('write-feedback');
+  fb.style.display = 'block';
+  if (allOk) {
+    fb.style.color = 'var(--grass)';
+    fb.textContent = `🎉 Perfect! ${correctRows} × ${correctCols} = ${correctTotal}`;
+    score += 10; correctCount++;
+    showToast('✅ Correct! +10', false);
+  } else {
+    fb.style.color = 'var(--berry)';
+    fb.textContent = `The answer is ${correctRows} × ${correctCols} = ${correctTotal}`;
+    showToast('❌ Almost! Check the answer', true);
+  }
+
+  document.getElementById('score-display').textContent = score;
+  document.getElementById('next-btn').classList.add('visible');
+}
+
+// ── NEXT / RESULTS ────────────────────────────────────────────────────────────
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const total = questions.length;
+  const pct = correctCount / total;
+
+  let emoji, title, sub;
+  if (pct === 1)       { emoji='🏆'; title='Perfect Score!';    sub='You got every single one right!'; }
+  else if (pct >= 0.75){ emoji='🌟'; title='Awesome Job!';      sub='You are an array superstar!'; }
+  else if (pct >= 0.5) { emoji='😊'; title='Good Work!';        sub='Keep practicing and you\'ll get them all!'; }
+  else                 { emoji='💪'; title='Keep Trying!';       sub='Practice makes perfect — you can do it!'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = sub;
+  document.getElementById('res-correct').textContent = correctCount;
+  document.getElementById('res-total').textContent = total;
+  document.getElementById('res-score').textContent = score + ' ⭐';
+
+  // stars
+  ['star1','star2','star3'].forEach(id => document.getElementById(id).classList.remove('lit'));
+  setTimeout(() => {
+    if (pct >= 0.4) document.getElementById('star1').classList.add('lit');
+    setTimeout(() => {
+      if (pct >= 0.7) document.getElementById('star2').classList.add('lit');
+      setTimeout(() => {
+        if (pct === 1) document.getElementById('star3').classList.add('lit');
+      }, 300);
+    }, 300);
+  }, 400);
+
+  document.getElementById('play-again-btn').onclick = () => startMode(currentMode);
+
+  showScreen('results');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, isWrong) {
+  const t = document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'feedback-toast' + (isWrong ? ' wrong-toast' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function buildArrayHTML(rows, cols, color) {
+  let html = '<div style="display:flex;flex-direction:column;gap:6px">';
+  for (let r = 0; r < rows; r++) {
+    html += '<div class="array-row">';
+    for (let c = 0; c < cols; c++) {
+      html += `<div class="array-dot ${color}"></div>`;
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function buildMiniArrayHTML(rows, cols, color) {
+  let html = '<div class="mini-array">';
+  for (let r = 0; r < rows; r++) {
+    html += '<div class="mini-row">';
+    for (let c = 0; c < cols; c++) {
+      html += `<div class="mini-dot" style="background:var(--${color})"></div>`;
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+</script>
+</body>
+</html>
