@@ -3,274 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Array Adventure 🌟</title>
+<title>Math Adventure ⭐</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 :root {
-  --sky: #5B9EF5;
-  --sky-light: #EBF3FF;
-  --sun: #FFB830;
-  --sun-light: #FFF4D6;
-  --grass: #4DC87A;
-  --grass-light: #E6FAF0;
-  --berry: #F56B8A;
-  --berry-light: #FFF0F3;
-  --purple: #9B6EF3;
-  --purple-light: #F3EEFF;
-  --bg: #F7F9FF;
-  --card: #FFFFFF;
-  --text: #1E1E2E;
-  --muted: #8892A4;
-  --radius: 20px;
-  --shadow: 0 4px 20px rgba(91,158,245,0.13);
+  --sky:#5B9EF5; --sky-l:#EBF3FF;
+  --sun:#FFB830; --sun-l:#FFF4D6;
+  --grass:#4DC87A; --grass-l:#E6FAF0;
+  --berry:#F56B8A; --berry-l:#FFF0F3;
+  --purple:#9B6EF3; --purple-l:#F3EEFF;
+  --teal:#2ABFBF; --teal-l:#E0FAFA;
+  --orange:#FF7043; --orange-l:#FFF3EF;
+  --pink:#E91E8C; --pink-l:#FFE8F5;
+  --indigo:#5C6BC0; --indigo-l:#ECEEFF;
+  --bg:#F7F9FF; --card:#fff; --text:#1E1E2E; --muted:#8892A4;
+  --radius:20px; --shadow:0 4px 20px rgba(91,158,245,.13);
 }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/* HOME */
+#home{align-items:center;justify-content:flex-start;padding:32px 20px 40px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 60%);gap:0;overflow-y:auto}
+.hero{text-align:center;margin-bottom:28px}
+.hero-emoji{font-size:72px;animation:bob 2.4s ease-in-out infinite;display:block;margin-bottom:8px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.home-title{font-size:34px;font-weight:900;line-height:1.1;margin-bottom:6px}
+.home-title span{color:var(--sky)}
+.home-sub{font-size:15px;color:var(--muted);font-weight:600}
+.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px}
+.subject-card{background:var(--card);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;box-shadow:var(--shadow);cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;text-align:left}
+.subject-card:active{transform:scale(.96)}
+.s-icon{font-size:32px;line-height:1}
+.s-title{font-size:15px;font-weight:900;line-height:1.2}
+.s-desc{font-size:11px;color:var(--muted);font-weight:600}
+.subject-card.c0{border-color:var(--sky)}
+.subject-card.c1{border-color:var(--sun)}
+.subject-card.c2{border-color:var(--grass)}
+.subject-card.c3{border-color:var(--berry)}
+.subject-card.c4{border-color:var(--purple)}
+.subject-card.c5{border-color:var(--teal)}
+.subject-card.c6{border-color:var(--orange)}
+.subject-card.c7{border-color:var(--pink)}
+.subject-card.c8{border-color:var(--indigo)}
 
-body {
-  font-family: 'Nunito', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* GAME HEADER */
+.game-header{background:var(--card);padding:12px 16px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.06);position:sticky;top:0;z-index:10;flex-shrink:0}
+.back-btn{background:var(--sky-l);border:none;border-radius:12px;width:36px;height:36px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.game-title{font-size:15px;font-weight:900;flex:1}
+.score-pill{background:var(--sun-l);border-radius:20px;padding:5px 11px;font-size:13px;font-weight:800;color:#B8860B;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.progress-wrap{padding:8px 16px 0;background:var(--card);flex-shrink:0}
+.progress-bar{height:7px;background:#E8EDFB;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--purple));border-radius:99px;transition:width .5s ease}
+.progress-label{font-size:11px;color:var(--muted);font-weight:700;text-align:right;padding:3px 0 6px}
 
-/* ── SCREENS ── */
-.screen { display: none; min-height: 100vh; flex-direction: column; }
-.screen.active { display: flex; }
+/* QUESTION AREA */
+.question-area{flex:1;padding:16px 16px 28px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.q-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow)}
+.q-label{font-size:12px;font-weight:800;color:var(--sky);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.q-text{font-size:19px;font-weight:900;line-height:1.3}
+.q-sub{font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
 
-/* ── HOME ── */
-#home {
-  align-items: center;
-  justify-content: center;
-  padding: 32px 24px;
-  background: linear-gradient(160deg, #EBF3FF 0%, #F7F9FF 60%);
-  text-align: center;
-  gap: 0;
-}
-.hero-emoji { font-size: 88px; margin-bottom: 8px; animation: bob 2.4s ease-in-out infinite; }
-@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-.home-title { font-size: 38px; font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 8px; }
-.home-title span { color: var(--sky); }
-.home-sub { font-size: 16px; color: var(--muted); font-weight: 600; margin-bottom: 40px; }
+/* OPTIONS */
+.options-grid{display:flex;flex-direction:column;gap:10px}
+.opt-btn{background:var(--card);border:3px solid #E8EDFB;border-radius:14px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .15s,transform .12s;text-align:left;width:100%}
+.opt-btn:active{transform:scale(.98)}
+.opt-btn.correct{border-color:var(--grass);background:var(--grass-l)}
+.opt-btn.wrong{border-color:var(--berry);background:var(--berry-l)}
+.opt-dot{width:30px;height:30px;border-radius:50%;background:var(--sky-l);color:var(--sky);font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.opt-btn.correct .opt-dot{background:var(--grass);color:#fff}
+.opt-btn.wrong .opt-dot{background:var(--berry);color:#fff}
 
-.mode-cards { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 380px; }
-.mode-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  display: flex; align-items: center; gap: 16px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  border: 3px solid transparent;
-  transition: transform .15s, border-color .15s, box-shadow .15s;
-  text-align: left;
-}
-.mode-card:active { transform: scale(.97); }
-.mode-card.sky   { border-color: var(--sky); }
-.mode-card.sun   { border-color: var(--sun); }
-.mode-card.grass { border-color: var(--grass); }
-.mode-icon { font-size: 40px; flex-shrink: 0; }
-.mode-info h3 { font-size: 18px; font-weight: 900; }
-.mode-info p  { font-size: 13px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+/* MINI ARRAY */
+.mini-array{display:flex;flex-direction:column;gap:3px}
+.mini-row{display:flex;gap:3px}
+.mini-dot{width:13px;height:13px;border-radius:50%;opacity:.8}
 
-/* ── GAME HEADER ── */
-.game-header {
-  background: var(--card);
-  padding: 14px 20px 12px;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  position: sticky; top: 0; z-index: 10;
-}
-.back-btn {
-  background: var(--sky-light); border: none; border-radius: 12px;
-  width: 38px; height: 38px; font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.game-title { font-size: 16px; font-weight: 900; flex: 1; }
-.score-pill {
-  background: var(--sun-light); border-radius: 20px;
-  padding: 5px 12px; font-size: 14px; font-weight: 800; color: #B8860B;
-  display: flex; align-items: center; gap: 4px;
-}
+/* NEXT BTN */
+.next-btn{background:var(--sky);color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;width:100%;display:none;margin-top:2px;box-shadow:0 4px 16px rgba(91,158,245,.4);transition:transform .12s}
+.next-btn:active{transform:scale(.98)}
+.next-btn.visible{display:block}
 
-/* progress bar */
-.progress-wrap { padding: 10px 20px 0; background: var(--card); }
-.progress-bar { height: 8px; background: #E8EDFB; border-radius: 99px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sky), var(--purple)); border-radius: 99px; transition: width .5s ease; }
-.progress-label { font-size: 12px; color: var(--muted); font-weight: 700; text-align: right; padding: 4px 0 8px; }
+/* ARRAY DOTS */
+.array-dot{width:24px;height:24px;border-radius:50%}
+.array-dot.sky{background:var(--sky)}
+.array-dot.sun{background:var(--sun)}
+.array-dot.grass{background:var(--grass)}
+.array-dot.berry{background:var(--berry)}
+.array-dot.purple{background:var(--purple)}
+.array-dot.teal{background:var(--teal)}
+.array-row{display:flex;gap:5px}
 
-/* ── QUESTION AREA ── */
-.question-area { flex: 1; padding: 20px 20px 32px; display: flex; flex-direction: column; gap: 18px; }
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--grass);color:#fff;border-radius:14px;padding:12px 22px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(77,200,122,.35);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;opacity:0;z-index:100;white-space:nowrap}
+.toast.wrong-t{background:var(--berry);box-shadow:0 8px 32px rgba(245,107,138,.35)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
-.question-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 22px 20px;
-  box-shadow: var(--shadow);
-}
-.question-card .q-label { font-size: 13px; font-weight: 800; color: var(--sky); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
-.question-card .q-text  { font-size: 20px; font-weight: 900; color: var(--text); line-height: 1.3; }
-.question-card .q-sub   { font-size: 14px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+/* NUMBER INPUT */
+.num-input{width:100%;padding:11px 12px;border:3px solid #E8EDFB;border-radius:12px;font-size:20px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text);background:#fff}
+.num-input:focus{border-color:var(--sky)}
 
-/* Array display */
-.array-display { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-.array-dot {
-  width: 26px; height: 26px; border-radius: 50%;
-  transition: transform .2s;
-}
-.array-dot.sky    { background: var(--sky); }
-.array-dot.sun    { background: var(--sun); }
-.array-dot.grass  { background: var(--grass); }
-.array-dot.berry  { background: var(--berry); }
-.array-dot.purple { background: var(--purple); }
+/* RESULTS */
+#results{align-items:center;justify-content:center;padding:36px 20px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 70%);text-align:center;gap:0;overflow-y:auto}
+.res-emoji{font-size:88px;margin-bottom:10px}
+.res-title{font-size:28px;font-weight:900;margin-bottom:4px}
+.res-sub{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:24px}
+.stars-row{display:flex;justify-content:center;gap:6px;margin-bottom:24px}
+.star{font-size:44px;opacity:.2;transition:opacity .4s,transform .4s}
+.star.lit{opacity:1;transform:scale(1.15)}
+.res-card{background:var(--card);border-radius:var(--radius);padding:18px 24px;width:100%;max-width:340px;box-shadow:var(--shadow);margin-bottom:24px}
+.res-stat{display:flex;justify-content:space-between;align-items:center;padding:9px 0}
+.res-stat+.res-stat{border-top:1px solid #F0F3FA}
+.res-stat .sl{font-size:14px;font-weight:700;color:var(--muted)}
+.res-stat .sv{font-size:19px;font-weight:900}
+.grade-box{background:var(--sun-l);border-radius:16px;padding:16px 24px;margin-bottom:20px;width:100%;max-width:340px}
+.grade-label{font-size:13px;font-weight:700;color:#B8860B;margin-bottom:4px}
+.grade-num{font-size:52px;font-weight:900;color:#B8860B;line-height:1}
+.grade-desc{font-size:14px;font-weight:700;color:#B8860B;margin-top:2px}
+.play-btn{background:var(--sky);color:#fff;border:none;border-radius:14px;padding:14px 36px;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(91,158,245,.4);margin-bottom:10px}
+.home-btn-link{background:none;border:none;color:var(--muted);font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
 
-.array-row { display: flex; gap: 6px; }
+/* MODULE SELECT */
+#module-select{align-items:center;justify-content:flex-start;padding:20px 16px 36px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 60%);overflow-y:auto}
+.ms-header{display:flex;align-items:center;gap:10px;margin-bottom:24px;width:100%}
+.ms-back{background:var(--sky-l);border:none;border-radius:12px;width:36px;height:36px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ms-title{font-size:18px;font-weight:900}
+.mode-cards{display:flex;flex-direction:column;gap:12px;width:100%}
+.mode-card{background:var(--card);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;text-align:left}
+.mode-card:active{transform:scale(.97)}
+.mode-icon{font-size:36px;flex-shrink:0}
+.mode-info h3{font-size:16px;font-weight:900}
+.mode-info p{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
 
-/* Options grid */
-.options-grid { display: flex; flex-direction: column; gap: 12px; }
-.option-btn {
-  background: var(--card);
-  border: 3px solid #E8EDFB;
-  border-radius: 16px;
-  padding: 14px 18px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 17px; font-weight: 800;
-  color: var(--text);
-  cursor: pointer;
-  display: flex; align-items: center; gap: 14px;
-  transition: border-color .15s, background .15s, transform .12s;
-  text-align: left;
-  width: 100%;
-}
-.option-btn:active { transform: scale(.98); }
-.option-btn.selected { border-color: var(--sky); background: var(--sky-light); }
-.option-btn.correct  { border-color: var(--grass); background: var(--grass-light); }
-.option-btn.wrong    { border-color: var(--berry); background: var(--berry-light); }
+/* TALLY */
+.tally-mark{font-size:22px;font-weight:900;letter-spacing:-2px;color:var(--text)}
 
-.option-dot {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--sky-light); color: var(--sky);
-  font-size: 15px; font-weight: 900;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.option-btn.correct .option-dot { background: var(--grass); color: white; }
-.option-btn.wrong   .option-dot { background: var(--berry); color: white; }
+/* MONEY */
+.money-item{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800}
+.money-coin{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0}
 
-/* mini arrays in options */
-.mini-array { display: flex; flex-direction: column; gap: 4px; }
-.mini-row { display: flex; gap: 4px; }
-.mini-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--sky); opacity: .75; }
-
-/* feedback toast */
-.feedback-toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-  background: var(--grass); color: white;
-  border-radius: 16px; padding: 14px 24px;
-  font-size: 16px; font-weight: 800;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 8px 32px rgba(77,200,122,.35);
-  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .35s;
-  opacity: 0; z-index: 100; white-space: nowrap;
-}
-.feedback-toast.wrong-toast { background: var(--berry); box-shadow: 0 8px 32px rgba(245,107,138,.35); }
-.feedback-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-/* next btn */
-.next-btn {
-  background: var(--sky);
-  color: white; border: none;
-  border-radius: 16px; padding: 16px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 17px; font-weight: 900;
-  cursor: pointer; width: 100%;
-  display: none; margin-top: 4px;
-  transition: opacity .2s, transform .12s;
-  box-shadow: 0 4px 16px rgba(91,158,245,.4);
-}
-.next-btn:active { transform: scale(.98); }
-.next-btn.visible { display: block; }
-
-/* ── RESULTS ── */
-#results {
-  align-items: center; justify-content: center;
-  padding: 40px 24px;
-  background: linear-gradient(160deg, #EBF3FF 0%, #F7F9FF 70%);
-  text-align: center; gap: 0;
-}
-.result-emoji { font-size: 96px; margin-bottom: 12px; }
-.result-title { font-size: 30px; font-weight: 900; margin-bottom: 6px; }
-.result-sub   { font-size: 16px; color: var(--muted); font-weight: 600; margin-bottom: 32px; }
-.stars-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
-.star { font-size: 48px; opacity: .2; transition: opacity .4s, transform .4s; }
-.star.lit { opacity: 1; transform: scale(1.15); }
-
-.result-card {
-  background: var(--card); border-radius: var(--radius);
-  padding: 20px 28px; width: 100%; max-width: 340px;
-  box-shadow: var(--shadow); margin-bottom: 28px;
-}
-.result-stat { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-.result-stat + .result-stat { border-top: 1px solid #F0F3FA; }
-.result-stat .stat-label { font-size: 15px; font-weight: 700; color: var(--muted); }
-.result-stat .stat-value { font-size: 20px; font-weight: 900; color: var(--text); }
-
-.play-again-btn {
-  background: var(--sky); color: white; border: none;
-  border-radius: 16px; padding: 16px 40px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 18px; font-weight: 900;
-  cursor: pointer; box-shadow: 0 4px 16px rgba(91,158,245,.4);
-}
-.home-link-btn {
-  background: none; border: none;
-  color: var(--muted); font-family: 'Nunito', sans-serif;
-  font-size: 15px; font-weight: 700; cursor: pointer;
-  margin-top: 14px;
-}
+/* Comparison */
+.cmp-number{font-size:36px;font-weight:900;color:var(--sky);text-align:center;margin:8px 0}
+.cmp-symbol{font-size:28px;font-weight:900;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════ HOME ══════════════════ -->
+<!-- HOME -->
 <div id="home" class="screen active">
-  <div class="hero-emoji">🎮</div>
-  <h1 class="home-title">Array<br><span>Adventure</span></h1>
-  <p class="home-sub">Pick a challenge to begin!</p>
-
-  <div class="mode-cards">
-    <div class="mode-card sky" onclick="startMode('match')">
-      <div class="mode-icon">🔗</div>
-      <div class="mode-info">
-        <h3>Match It!</h3>
-        <p>Connect the array to its description</p>
-      </div>
-    </div>
-    <div class="mode-card sun" onclick="startMode('circle')">
-      <div class="mode-icon">⭕</div>
-      <div class="mode-info">
-        <h3>Pick the Right Array</h3>
-        <p>Choose which array matches the multiplication</p>
-      </div>
-    </div>
-    <div class="mode-card grass" onclick="startMode('write')">
-      <div class="mode-icon">✏️</div>
-      <div class="mode-info">
-        <h3>Read the Array</h3>
-        <p>Count rows and columns, then write the equation</p>
-      </div>
-    </div>
+  <div class="hero">
+    <span class="hero-emoji">🎓</span>
+    <h1 class="home-title">Math<br><span>Adventure</span></h1>
+    <p class="home-sub">Choose a topic to practice!</p>
   </div>
+  <div class="subject-grid" id="subject-grid"></div>
 </div>
 
-<!-- ══════════════════ GAME ══════════════════ -->
+<!-- MODULE SELECT -->
+<div id="module-select" class="screen">
+  <div class="ms-header">
+    <button class="ms-back" onclick="goHome()">←</button>
+    <div class="ms-title" id="ms-title">Choose a mode</div>
+  </div>
+  <div class="mode-cards" id="mode-cards"></div>
+</div>
+
+<!-- GAME -->
 <div id="game" class="screen">
   <div class="game-header">
     <button class="back-btn" onclick="goHome()">←</button>
-    <div class="game-title" id="game-title">Match It!</div>
+    <div class="game-title" id="game-title"></div>
     <div class="score-pill">⭐ <span id="score-display">0</span></div>
   </div>
   <div class="progress-wrap">
@@ -280,468 +184,592 @@ body {
   <div class="question-area" id="question-area"></div>
 </div>
 
-<!-- ══════════════════ RESULTS ══════════════════ -->
+<!-- RESULTS -->
 <div id="results" class="screen">
-  <div class="result-emoji" id="result-emoji">🎉</div>
-  <div class="result-title" id="result-title">Amazing!</div>
-  <div class="result-sub" id="result-sub">You're an array superstar!</div>
+  <div class="res-emoji" id="res-emoji">🎉</div>
+  <div class="res-title" id="res-title">Amazing!</div>
+  <div class="res-sub" id="res-sub">You're a superstar!</div>
   <div class="stars-row">
-    <div class="star" id="star1">⭐</div>
-    <div class="star" id="star2">⭐</div>
-    <div class="star" id="star3">⭐</div>
+    <div class="star" id="s1">⭐</div>
+    <div class="star" id="s2">⭐</div>
+    <div class="star" id="s3">⭐</div>
   </div>
-  <div class="result-card">
-    <div class="result-stat">
-      <span class="stat-label">Correct answers</span>
-      <span class="stat-value" id="res-correct">0</span>
-    </div>
-    <div class="result-stat">
-      <span class="stat-label">Total questions</span>
-      <span class="stat-value" id="res-total">0</span>
-    </div>
-    <div class="result-stat">
-      <span class="stat-label">Score</span>
-      <span class="stat-value" id="res-score">0 ⭐</span>
-    </div>
+  <div class="grade-box">
+    <div class="grade-label">Your simulated grade</div>
+    <div class="grade-num" id="grade-num">10</div>
+    <div class="grade-desc" id="grade-desc">Outstanding!</div>
   </div>
-  <button class="play-again-btn" id="play-again-btn">Play Again 🔁</button>
-  <button class="home-link-btn" onclick="goHome()">← Back to Home</button>
+  <div class="res-card">
+    <div class="res-stat"><span class="sl">Correct</span><span class="sv" id="r-correct">0</span></div>
+    <div class="res-stat"><span class="sl">Total</span><span class="sv" id="r-total">0</span></div>
+    <div class="res-stat"><span class="sl">Score</span><span class="sv" id="r-score">0 ⭐</span></div>
+  </div>
+  <button class="play-btn" id="play-again-btn">Play Again 🔁</button>
+  <button class="home-btn-link" onclick="goHome()">← Back to Home</button>
 </div>
 
-<!-- Feedback toast -->
-<div class="feedback-toast" id="toast">✅ Correct!</div>
+<div class="toast" id="toast">✅ Correct!</div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────────────────────
-
-const COLORS = ['sky','sun','grass','berry','purple'];
-
-const MATCH_QUESTIONS = [
-  { rows:3, cols:4, label:'3 groups of 4', emoji:'🥚', color:'sky' },
-  { rows:2, cols:6, label:'2 groups of 6', emoji:'🍪', color:'sun' },
-  { rows:5, cols:2, label:'5 groups of 2', emoji:'⭐', color:'grass' },
-  { rows:4, cols:3, label:'4 groups of 3', emoji:'🌸', color:'berry' },
-  { rows:3, cols:5, label:'3 groups of 5', emoji:'🍎', color:'purple' },
-  { rows:2, cols:8, label:'2 groups of 8', emoji:'🐛', color:'sky' },
-  { rows:6, cols:2, label:'6 groups of 2', emoji:'🎈', color:'sun' },
-  { rows:4, cols:5, label:'4 groups of 5', emoji:'🦋', color:'grass' },
+// ── SUBJECTS ────────────────────────────────────────────────────────────────
+const SUBJECTS = [
+  { id:'arrays',   icon:'🔢', title:'Arrays',           desc:'Multiplication with dot arrays', color:'c0' },
+  { id:'addition', icon:'➕', title:'Addition',          desc:'Number pairs & multi-step', color:'c1' },
+  { id:'equal',    icon:'⚖️', title:'Equal or Not',      desc:'Same value, different forms', color:'c2' },
+  { id:'place',    icon:'🏠', title:'Tens & Ones',       desc:'Place value & compare numbers', color:'c3' },
+  { id:'tally',    icon:'📊', title:'Tally & Graphs',    desc:'Read charts and block graphs', color:'c4' },
+  { id:'time',     icon:'📅', title:'Days & Months',     desc:'Calendar and time', color:'c5' },
+  { id:'money',    icon:'💰', title:'Money',             desc:'Dollars and cents', color:'c6' },
+  { id:'chance',   icon:'🎲', title:'Probability',       desc:'Good, small, equal chance', color:'c7' },
+  { id:'pictogram',icon:'📈', title:'Pictograms',        desc:'Read picture graphs', color:'c8' },
 ];
 
-const CIRCLE_QUESTIONS = [
-  {
-    mult: '3 × 4', rows: 3, cols: 4, answer: 0, color:'sky',
-    options: [
-      { rows:3, cols:4 },
-      { rows:2, cols:5 },
-      { rows:4, cols:3 }
-    ]
-  },
-  {
-    mult: '5 × 3', rows: 5, cols: 3, answer: 1, color:'berry',
-    options: [
-      { rows:3, cols:4 },
-      { rows:5, cols:3 },
-      { rows:3, cols:6 }
-    ]
-  },
-  {
-    mult: '2 × 8', rows: 2, cols: 8, answer: 2, color:'sun',
-    options: [
-      { rows:4, cols:4 },
-      { rows:3, cols:5 },
-      { rows:2, cols:8 }
-    ]
-  },
-  {
-    mult: '4 × 4', rows: 4, cols: 4, answer: 0, color:'purple',
-    options: [
-      { rows:4, cols:4 },
-      { rows:2, cols:8 },
-      { rows:8, cols:2 }
-    ]
-  },
-  {
-    mult: '6 × 2', rows: 6, cols: 2, answer: 1, color:'grass',
-    options: [
-      { rows:3, cols:4 },
-      { rows:6, cols:2 },
-      { rows:2, cols:6 }
-    ]
-  },
-  {
-    mult: '3 × 6', rows: 3, cols: 6, answer: 2, color:'sky',
-    options: [
-      { rows:6, cols:3 },
-      { rows:2, cols:9 },
-      { rows:3, cols:6 }
-    ]
-  },
-  {
-    mult: '5 × 4', rows: 5, cols: 4, answer: 0, color:'berry',
-    options: [
-      { rows:5, cols:4 },
-      { rows:4, cols:5 },
-      { rows:2, cols:10 }
-    ]
-  },
-  {
-    mult: '7 × 2', rows: 7, cols: 2, answer: 1, color:'sun',
-    options: [
-      { rows:2, cols:7 },
-      { rows:7, cols:2 },
-      { rows:4, cols:3 }
-    ]
-  },
+const MODES = {
+  arrays:    [{id:'match',  icon:'🔗', title:'Match It!',            desc:'Match the array to its description'},
+              {id:'circle', icon:'⭕', title:'Pick the Right Array',  desc:'Choose which array matches the multiplication'},
+              {id:'write',  icon:'✏️', title:'Read the Array',        desc:'Count rows and columns, write the equation'}],
+  addition:  [{id:'circle', icon:'⭕', title:'Circle the Answer',     desc:'Choose the correct total'},
+              {id:'write',  icon:'✏️', title:'Complete the Sentence', desc:'Fill in the missing number'}],
+  equal:     [{id:'circle', icon:'⭕', title:'Are They Equal?',       desc:'Pick which expressions are equal'},
+              {id:'write',  icon:'✏️', title:'Find the Match',        desc:'Write the matching value'}],
+  place:     [{id:'circle', icon:'⭕', title:'Tens & Ones Quiz',      desc:'Identify the place value'},
+              {id:'write',  icon:'✏️', title:'Compare Numbers',       desc:'Use > or < to compare'}],
+  tally:     [{id:'circle', icon:'⭕', title:'Read the Tally',        desc:'Count tally marks and answer'},
+              {id:'circle2',icon:'📊', title:'Read the Bar Graph',    desc:'Answer questions about bar graphs'}],
+  time:      [{id:'circle', icon:'📅', title:'Days Quiz',             desc:'Order and identify days & months'},
+              {id:'write',  icon:'✏️', title:'Months Quiz',           desc:'What comes before or after?'}],
+  money:     [{id:'circle', icon:'💰', title:'Money Values',          desc:'Match amounts to descriptions'},
+              {id:'write',  icon:'✏️', title:'Count the Money',       desc:'Add up dollars and cents'}],
+  chance:    [{id:'circle', icon:'🎲', title:'What\'s the Chance?',   desc:'Good, small or equal chance?'}],
+  pictogram: [{id:'circle', icon:'📈', title:'Read the Pictogram',    desc:'Answer questions from picture charts'}],
+};
+
+// ── QUESTIONS ──────────────────────────────────────────────────────────────
+const Q = {};
+
+Q.arrays_match = [
+  {rows:3,cols:4,label:'3 groups of 4',color:'sky'},
+  {rows:2,cols:6,label:'2 groups of 6',color:'sun'},
+  {rows:5,cols:2,label:'5 groups of 2',color:'grass'},
+  {rows:4,cols:3,label:'4 groups of 3',color:'berry'},
+  {rows:3,cols:5,label:'3 groups of 5',color:'purple'},
+  {rows:2,cols:8,label:'2 groups of 8',color:'teal'},
+  {rows:6,cols:2,label:'6 groups of 2',color:'sky'},
+  {rows:4,cols:5,label:'4 groups of 5',color:'sun'},
 ];
 
-const WRITE_QUESTIONS = [
-  { rows:3, cols:5, color:'purple', equation:'3 × 5 = 15', rowLabel:3, colLabel:5, total:15 },
-  { rows:4, cols:4, color:'sun',    equation:'4 × 4 = 16', rowLabel:4, colLabel:4, total:16 },
-  { rows:6, cols:3, color:'sky',    equation:'6 × 3 = 18', rowLabel:6, colLabel:3, total:18 },
-  { rows:2, cols:7, color:'grass',  equation:'2 × 7 = 14', rowLabel:2, colLabel:7, total:14 },
-  { rows:5, cols:5, color:'berry',  equation:'5 × 5 = 25', rowLabel:5, colLabel:5, total:25 },
-  { rows:3, cols:6, color:'purple', equation:'3 × 6 = 18', rowLabel:3, colLabel:6, total:18 },
-  { rows:4, cols:6, color:'sky',    equation:'4 × 6 = 24', rowLabel:4, colLabel:6, total:24 },
-  { rows:2, cols:9, color:'sun',    equation:'2 × 9 = 18', rowLabel:2, colLabel:9, total:18 },
+Q.arrays_circle = [
+  {mult:'3 × 4',rows:3,cols:4,answer:0,color:'sky',   opts:[{r:3,c:4},{r:2,c:5},{r:4,c:3}]},
+  {mult:'5 × 3',rows:5,cols:3,answer:1,color:'berry', opts:[{r:3,c:4},{r:5,c:3},{r:3,c:6}]},
+  {mult:'2 × 8',rows:2,cols:8,answer:2,color:'sun',   opts:[{r:4,c:4},{r:3,c:5},{r:2,c:8}]},
+  {mult:'4 × 4',rows:4,cols:4,answer:0,color:'purple',opts:[{r:4,c:4},{r:2,c:8},{r:8,c:2}]},
+  {mult:'6 × 2',rows:6,cols:2,answer:1,color:'grass', opts:[{r:3,c:4},{r:6,c:2},{r:2,c:6}]},
+  {mult:'3 × 6',rows:3,cols:6,answer:2,color:'teal',  opts:[{r:6,c:3},{r:2,c:9},{r:3,c:6}]},
+  {mult:'5 × 4',rows:5,cols:4,answer:0,color:'sky',   opts:[{r:5,c:4},{r:4,c:5},{r:2,c:10}]},
+  {mult:'7 × 2',rows:7,cols:2,answer:1,color:'berry', opts:[{r:2,c:7},{r:7,c:2},{r:4,c:3}]},
 ];
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let currentMode = '';
-let currentIndex = 0;
-let score = 0;
-let correctCount = 0;
-let answered = false;
-let questions = [];
-let matchSelected = null;  // for match mode
+Q.arrays_write = [
+  {rows:3,cols:5,color:'purple',rL:3,cL:5,tot:15},
+  {rows:4,cols:4,color:'sun',   rL:4,cL:4,tot:16},
+  {rows:6,cols:3,color:'sky',   rL:6,cL:3,tot:18},
+  {rows:2,cols:7,color:'grass', rL:2,cL:7,tot:14},
+  {rows:5,cols:5,color:'berry', rL:5,cL:5,tot:25},
+  {rows:3,cols:6,color:'teal',  rL:3,cL:6,tot:18},
+  {rows:4,cols:6,color:'sky',   rL:4,cL:6,tot:24},
+  {rows:2,cols:9,color:'sun',   rL:2,cL:9,tot:18},
+];
 
-// ── NAV ───────────────────────────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+Q.addition_circle = [
+  {q:'6 + 2 + 4 = ?',  answer:12, opts:[10,12,14]},
+  {q:'5 + 2 + 8 = ?',  answer:15, opts:[13,15,17]},
+  {q:'3 + 4 + 7 = ?',  answer:14, opts:[12,14,16]},
+  {q:'8 + 3 + 2 + 3 = ?', answer:16, opts:[14,16,18]},
+  {q:'9 + 6 + 4 + 3 + 1 = ?', answer:23, opts:[21,23,25]},
+  {q:'4 + 7 + 3 + 5 = ?', answer:19, opts:[17,19,21]},
+  {q:'5 + 7 + 2 + 3 = ?', answer:17, opts:[15,17,19]},
+  {q:'8 + 5 + 3 + 2 = ?', answer:18, opts:[16,18,20]},
+];
+
+Q.addition_write = [
+  {q:'65 + 4 = ?',  answer:69},
+  {q:'82 − 3 = ?',  answer:79},
+  {q:'3 + 8 + 7 + 1 = ?', answer:19},
+  {q:'54 + 30 = ?', answer:84},
+  {q:'51 − 30 = ?', answer:21},
+  {q:'60 − 40 = ?', answer:20},
+  {q:'10 + 49 = ?', answer:59},
+  {q:'45 + 31 = ?', answer:76},
+];
+
+Q.equal_circle = [
+  {q:'18 + 2 = ?', answer:20, opts:[18,20,22], note:'Which value equals the other side?'},
+  {q:'8 + 7 = ?',  answer:15, opts:[13,15,17], note:''},
+  {q:'25 − 5 = ?', answer:20, opts:[18,20,22], note:''},
+  {q:'15 − 6 = ?', answer:9,  opts:[7,9,11],  note:''},
+  {q:'19 − 4 = ?', answer:15, opts:[13,15,17], note:''},
+  {q:'4 + 6 = ?',  answer:10, opts:[8,10,12],  note:''},
+  {q:'28 − 9 = ?', answer:19, opts:[17,19,21], note:''},
+  {q:'8 + 9 = ?',  answer:17, opts:[15,17,19], note:''},
+];
+
+Q.equal_write = [
+  {q:'15 + 2 = ___ − 3  (what result do both equal?)', answer:17},
+  {q:'25 − 7 = 12 + ___', answer:6},
+  {q:'4 + 6 = ___ − 0', answer:10},
+  {q:'13 + 2 = 17 − ___', answer:2},
+  {q:'16 − 9 = 6 + ___', answer:1},
+  {q:'23 − 8 = ___ − 1', answer:16},
+  {q:'14 + 3 = 7 + ___', answer:10},
+  {q:'22 − 4 = 9 + ___', answer:9},
+];
+
+Q.place_circle = [
+  {q:'What is the value of the TENS digit in 76?', answer:70, opts:[7,70,76]},
+  {q:'What is the value of the ONES digit in 43?', answer:3,  opts:[3,40,43]},
+  {q:'Which number has 6 tens and 0 ones?',        answer:60, opts:[6,60,66]},
+  {q:'Which is the biggest? 15 / 69 / 73 / 48',   answer:73, opts:[69,73,48]},
+  {q:'Which is the smallest? 63 / 65 / 69 / 62',  answer:62, opts:[62,63,65]},
+  {q:'How many tens in 58?',                        answer:5,  opts:[5,8,58]},
+  {q:'What number has 4 tens and 6 ones?',         answer:46, opts:[40,46,64]},
+  {q:'Which is bigger: 74 or 47?',                 answer:74, opts:[47,74,'equal']},
+];
+
+Q.place_write = [
+  {q:'85 > ___  (write any smaller number)',  answer:84, flex:true, hint:'Any number less than 85'},
+  {q:'63 < ___  (write any bigger number)',   answer:64, flex:true, hint:'Any number greater than 63'},
+  {q:'16 < ___',  answer:17, flex:true, hint:'Any number greater than 16'},
+  {q:'74 < ___',  answer:75, flex:true, hint:'Any number greater than 74'},
+  {q:'58 > ___',  answer:57, flex:true, hint:'Any number less than 58'},
+  {q:'73 < ___',  answer:74, flex:true, hint:'Any number greater than 73'},
+  {q:'82 < ___',  answer:83, flex:true, hint:'Any number greater than 82'},
+  {q:'14 > ___',  answer:13, flex:true, hint:'Any number less than 14'},
+];
+
+Q.tally_circle = [
+  {q:'How many tally marks? ||||',            answer:4,  opts:[3,4,5]},
+  {q:'How many tally marks? |||| |',          answer:6,  opts:[5,6,7]},
+  {q:'How many tally marks? |||| ||||',       answer:9,  opts:[8,9,10]},
+  {q:'How many tally marks? |||| |||| |',     answer:11, opts:[10,11,12]},
+  {q:'Pencils: ||||, Notebooks: |||| |. Which has more?', answer:'Notebooks', opts:['Pencils','Notebooks','Same']},
+  {q:'Yellow: 5, Red: 3, Blue: 4, Green: 7. Which colour has most?', answer:'Green', opts:['Yellow','Blue','Green']},
+  {q:'Yellow: 5, Red: 3, Blue: 4, Green: 7. Which colour has fewest?', answer:'Red', opts:['Red','Blue','Yellow']},
+  {q:'Cars: ||||  |||, Aeroplanes: ||||, Trains: ||. How many vehicles altogether?', answer:14, opts:[12,14,16]},
+];
+
+Q.tally_circle2 = [
+  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. Which colours have the same count?', answer:'Red and orange', opts:['Red and blue','Orange and blue','Red and orange']},
+  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. How many more like red than blue?', answer:2, opts:[1,2,4]},
+  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. Total altogether?', answer:23, opts:[18,23,30]},
+  {q:'Lin\'s bag: notebooks=5, coloured pencils=8, rubbers=3, books=5, pencils=9. How many types of items?', answer:5, opts:[4,5,6]},
+  {q:'Lin\'s bag: notebooks=5, coloured pencils=8, rubbers=3, books=5, pencils=9. How many fewer books than coloured pencils?', answer:3, opts:[1,3,6]},
+  {q:'Breakfast drinks: milk=7, orange juice=10, lemon juice=4. Which do most children drink?', answer:'Orange juice', opts:['Milk','Orange juice','Lemon juice']},
+  {q:'Breakfast drinks: milk=7, orange juice=10, lemon juice=4. Which do fewest children drink?', answer:'Lemon juice', opts:['Milk','Orange juice','Lemon juice']},
+  {q:'Shapes: triangles=9, squares=5, pentagons=6. How many shapes altogether?', answer:20, opts:[18,20,22]},
+];
+
+Q.time_circle = [
+  {q:'What day comes after Monday?',   answer:'Tuesday',   opts:['Sunday','Tuesday','Wednesday']},
+  {q:'What day comes before Friday?',  answer:'Thursday',  opts:['Wednesday','Thursday','Saturday']},
+  {q:'What is the 1st month of the year?', answer:'January', opts:['January','February','March']},
+  {q:'What is the 5th month of the year?', answer:'May',     opts:['April','May','June']},
+  {q:'What is the 8th month of the year?', answer:'August',  opts:['July','August','September']},
+  {q:'How many days are in a week?',   answer:7,    opts:[5,7,10]},
+  {q:'How many months are in a year?', answer:12,   opts:[10,12,14]},
+  {q:'Today is Monday. Tomorrow will be?', answer:'Tuesday', opts:['Sunday','Tuesday','Wednesday']},
+];
+
+Q.time_write = [
+  {q:'What month comes after March?',     answer:'april',     display:'April'},
+  {q:'What month comes after April?',     answer:'may',       display:'May'},
+  {q:'What month comes before December?', answer:'november',  display:'November'},
+  {q:'What day comes after Wednesday?',   answer:'thursday',  display:'Thursday'},
+  {q:'What day comes after Saturday?',    answer:'sunday',    display:'Sunday'},
+  {q:'What is the 3rd month of the year?',answer:'march',     display:'March'},
+  {q:'What is the 12th month of the year?',answer:'december', display:'December'},
+  {q:'What month comes before June?',     answer:'may',       display:'May'},
+];
+
+Q.money_circle = [
+  {q:'What is $50?',  answer:'50 dollars', opts:['50 cents','50 dollars','5 dollars']},
+  {q:'What is 25c?',  answer:'25 cents',   opts:['25 dollars','25 cents','2 dollars']},
+  {q:'What is $1?',   answer:'1 dollar',   opts:['1 cent','10 dollars','1 dollar']},
+  {q:'What is 50c?',  answer:'50 cents',   opts:['50 dollars','50 cents','5 cents']},
+  {q:'What is $20?',  answer:'20 dollars', opts:['20 cents','2 dollars','20 dollars']},
+  {q:'$1 + 10c = ?',  answer:'$1.10',      opts:['$1.01','$1.10','$10.10']},
+  {q:'$5 + 50c = ?',  answer:'$5.50',      opts:['$5.05','$5.50','$55.00']},
+  {q:'$20 + 25c = ?', answer:'$20.25',     opts:['$20.25','$20.52','$22.50']},
+];
+
+Q.money_write = [
+  {q:'$50 and 10 cents = $___',   answer:50.10, display:'50.10'},
+  {q:'$5 and 50 cents = $___',    answer:5.50,  display:'5.50'},
+  {q:'$20 and 25 cents = $___',   answer:20.25, display:'20.25'},
+  {q:'$1 and 10 cents = $___',    answer:1.10,  display:'1.10'},
+  {q:'How many cents in $1?',     answer:100,   display:'100'},
+  {q:'$3 and 5 cents = $___',     answer:3.05,  display:'3.05'},
+  {q:'$0.40 = ___ cents',         answer:40,    display:'40'},
+  {q:'$5.60 = $5 and ___ cents',  answer:60,    display:'60'},
+];
+
+Q.chance_circle = [
+  {q:'A spinner is mostly RED with a tiny bit of BLUE. What is the chance of spinning RED?', answer:'Good chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'A spinner is half RED and half BLUE. What is the chance of spinning RED?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'A spinner is mostly BLUE with a tiny bit of RED. What is the chance of spinning RED?', answer:'Small chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'Blue tally: |||| |||  Purple tally: |||| |||| |||| |. Which colour has a GOOD chance of being spun?', answer:'Purple', opts:['Blue','Purple','Neither']},
+  {q:'A bag has 1 red ball and 9 blue balls. Chance of picking red?', answer:'Small chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'A bag has 5 red balls and 5 blue balls. Chance of picking red?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'Flipping a coin: heads or tails?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
+  {q:'A box has 8 apples and 2 oranges. Chance of picking an apple?', answer:'Good chance', opts:['Small chance','Equal chance','Good chance']},
+];
+
+Q.pictogram_circle = [
+  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many like rainy weather?', answer:7, opts:[5,7,9]},
+  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many more like snowy than cloudy?', answer:1, opts:[1,3,4]},
+  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many answered altogether?', answer:25, opts:[20,25,31]},
+  {q:'Favourite snack pictogram:\nApple:8, Chocolate:5, Sandwich:2, Biscuit:5, Yogurt:6\nWhich snack do fewest students like best?', answer:'Sandwich', opts:['Chocolate','Sandwich','Biscuit']},
+  {q:'Favourite snack pictogram:\nApple:8, Chocolate:5, Sandwich:2, Biscuit:5, Yogurt:6\nWhich snacks have the same number of students?', answer:'Chocolate and Biscuit', opts:['Apple and Yogurt','Chocolate and Biscuit','Sandwich and Biscuit']},
+  {q:'Fruits pictogram:\nBanana:10, Apple:9, Orange:7, Mango:5\nWhich fruit appears most?', answer:'Banana', opts:['Apple','Banana','Orange']},
+  {q:'Fruits pictogram:\nBanana:10, Apple:9, Orange:7, Mango:5\nHow many more bananas than mangoes?', answer:5, opts:[3,5,7]},
+  {q:'Kate\'s flowers:\nRed:5, Yellow:8, Orange:4, Pink:3, Purple:7\nWhich colour does she have most of?', answer:'Yellow', opts:['Red','Yellow','Purple']},
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let curSubject='', curMode='', curIdx=0, score=0, correct=0, answered=false, questions=[];
+
+// ── BUILD HOME ───────────────────────────────────────────────────────────────
+const grid = document.getElementById('subject-grid');
+SUBJECTS.forEach(s => {
+  const el = document.createElement('div');
+  el.className = `subject-card ${s.color}`;
+  el.innerHTML = `<div class="s-icon">${s.icon}</div><div class="s-title">${s.title}</div><div class="s-desc">${s.desc}</div>`;
+  el.onclick = () => selectSubject(s.id);
+  grid.appendChild(el);
+});
+
+// ── NAV ──────────────────────────────────────────────────────────────────────
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function goHome(){ show('home'); }
+
+function selectSubject(id){
+  curSubject = id;
+  const s = SUBJECTS.find(x=>x.id===id);
+  document.getElementById('ms-title').textContent = s.icon + ' ' + s.title;
+  const mc = document.getElementById('mode-cards');
+  mc.innerHTML = '';
+  const modes = MODES[id];
+  modes.forEach(m => {
+    const el = document.createElement('div');
+    const colorVar = s.color.replace('c','');
+    const colors = ['sky','sun','grass','berry','purple','teal','orange','pink','indigo'];
+    const col = colors[parseInt(s.color.substring(1))] || 'sky';
+    el.className = 'mode-card';
+    el.style.borderColor = `var(--${col})`;
+    el.innerHTML = `<div class="mode-icon">${m.icon}</div><div class="mode-info"><h3>${m.title}</h3><p>${m.desc}</p></div>`;
+    el.onclick = () => startGame(id, m.id, m.title);
+    mc.appendChild(el);
+  });
+  show('module-select');
 }
 
-function goHome() { showScreen('home'); }
-
-function startMode(mode) {
-  currentMode = mode;
-  currentIndex = 0;
-  score = 0;
-  correctCount = 0;
-  answered = false;
-  matchSelected = null;
-
-  const titles = { match:'Match It! 🔗', circle:'Pick the Right Array ⭕', write:'Read the Array ✏️' };
-  document.getElementById('game-title').textContent = titles[mode];
+function startGame(subject, mode, title){
+  curSubject=subject; curMode=mode; curIdx=0; score=0; correct=0; answered=false;
+  document.getElementById('game-title').textContent = title;
   document.getElementById('score-display').textContent = '0';
 
-  if (mode === 'match') questions = shuffle([...MATCH_QUESTIONS]);
-  else if (mode === 'circle') questions = shuffle([...CIRCLE_QUESTIONS]);
-  else questions = shuffle([...WRITE_QUESTIONS]);
-
-  showScreen('game');
-  renderQuestion();
+  // pick question set
+  const key = subject + '_' + mode;
+  const raw = Q[key];
+  if(!raw){ alert('Coming soon!'); return; }
+  questions = shuffle([...raw]);
+  show('game');
+  renderQ();
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
-function renderQuestion() {
+function renderQ(){
   answered = false;
-  matchSelected = null;
-  const q = questions[currentIndex];
+  const q = questions[curIdx];
   const total = questions.length;
-  const pct = (currentIndex / total) * 100;
-
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = `Question ${currentIndex + 1} of ${total}`;
+  document.getElementById('progress-fill').style.width = (curIdx/total*100)+'%';
+  document.getElementById('progress-label').textContent = `Question ${curIdx+1} of ${total}`;
   document.getElementById('score-display').textContent = score;
-
   const area = document.getElementById('question-area');
   area.innerHTML = '';
 
-  if (currentMode === 'match') renderMatch(area, q);
-  else if (currentMode === 'circle') renderCircle(area, q);
-  else renderWrite(area, q);
+  const key = curSubject + '_' + curMode;
+  if(key==='arrays_match') renderArrayMatch(area,q);
+  else if(key==='arrays_circle') renderArrayCircle(area,q);
+  else if(key==='arrays_write') renderArrayWrite(area,q);
+  else if(key.endsWith('_circle') || key.endsWith('_circle2')) renderMCQ(area,q);
+  else if(key.endsWith('_write')) renderWrite(area,q);
 }
 
-// ── MATCH MODE ────────────────────────────────────────────────────────────────
-function renderMatch(area, q) {
-  // Shuffle wrong labels pool
-  const all = MATCH_QUESTIONS.map(x => x.label);
-  const wrongs = shuffle(all.filter(l => l !== q.label)).slice(0,3);
-  const opts = shuffle([q.label, ...wrongs]);
-
-  area.innerHTML = `
-    <div class="question-card">
+// ── ARRAY MATCH ───────────────────────────────────────────────────────────────
+function renderArrayMatch(area,q){
+  const all = Q.arrays_match.map(x=>x.label);
+  const wrongs = shuffle(all.filter(l=>l!==q.label)).slice(0,3);
+  const opts = shuffle([q.label,...wrongs]);
+  area.innerHTML=`
+    <div class="q-card">
       <div class="q-label">Match It!</div>
       <div class="q-text">What is this array?</div>
       <div class="q-sub">Count the rows and columns 👇</div>
-      <div style="margin-top:16px">${buildArrayHTML(q.rows, q.cols, q.color)}</div>
+      <div style="margin-top:14px">${buildArray(q.rows,q.cols,q.color)}</div>
     </div>
     <div class="options-grid" id="opts"></div>
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
-  `;
-
-  const grid = document.getElementById('opts');
-  const letters = ['A','B','C','D'];
-  opts.forEach((label, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.dataset.label = label;
-    btn.innerHTML = `<div class="option-dot">${letters[i]}</div><span>${label}</span>`;
-    btn.onclick = () => selectMatch(btn, label === q.label);
-    grid.appendChild(btn);
+    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
+  const g=document.getElementById('opts');
+  const L=['A','B','C','D'];
+  opts.forEach((label,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-btn'; b.dataset.label=label;
+    b.innerHTML=`<div class="opt-dot">${L[i]}</div><span>${label}</span>`;
+    b.onclick=()=>checkMatch(b,label===q.label,q.label);
+    g.appendChild(b);
   });
 }
-
-function selectMatch(btn, isCorrect) {
-  if (answered) return;
-  answered = true;
-  const allBtns = document.querySelectorAll('#opts .option-btn');
-  allBtns.forEach(b => {
-    if (b.dataset.label === questions[currentIndex].label) b.classList.add('correct');
-  });
-  if (isCorrect) {
-    btn.classList.add('correct');
-    btn.querySelector('.option-dot').textContent = '✓';
-    score += 10; correctCount++;
-    showToast('✅ Correct! +10', false);
-  } else {
-    btn.classList.add('wrong');
-    btn.querySelector('.option-dot').textContent = '✗';
-    showToast('❌ Not quite! Try again next time', true);
-  }
-  document.getElementById('score-display').textContent = score;
-  document.getElementById('next-btn').classList.add('visible');
+function checkMatch(btn,ok,correctLabel){
+  if(answered)return; answered=true;
+  document.querySelectorAll('#opts .opt-btn').forEach(b=>{ if(b.dataset.label===correctLabel){ b.classList.add('correct'); b.querySelector('.opt-dot').textContent='✓'; }});
+  if(ok){score+=10;correct++;toast('✅ Correct! +10',false);}
+  else{btn.classList.add('wrong');btn.querySelector('.opt-dot').textContent='✗';toast('❌ Not quite!',true);}
+  updateScore(); showNext();
 }
 
-// ── CIRCLE MODE ───────────────────────────────────────────────────────────────
-function renderCircle(area, q) {
-  const letters = ['A','B','C'];
-  area.innerHTML = `
-    <div class="question-card">
+// ── ARRAY CIRCLE ──────────────────────────────────────────────────────────────
+function renderArrayCircle(area,q){
+  const L=['A','B','C'];
+  area.innerHTML=`
+    <div class="q-card">
       <div class="q-label">Pick the Right Array</div>
-      <div class="q-text" style="font-size:28px">${q.mult}</div>
+      <div class="q-text" style="font-size:26px">${q.mult}</div>
       <div class="q-sub">Which array shows this multiplication?</div>
     </div>
     <div class="options-grid" id="opts"></div>
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
-  `;
-
-  const grid = document.getElementById('opts');
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.dataset.idx = i;
-    btn.innerHTML = `
-      <div class="option-dot">${letters[i]}</div>
-      <div>
-        <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px">${opt.rows} rows × ${opt.cols} columns</div>
-        ${buildMiniArrayHTML(opt.rows, opt.cols, q.color)}
-      </div>
-    `;
-    btn.onclick = () => selectCircle(btn, i === q.answer, i, q.answer);
-    grid.appendChild(btn);
+    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
+  const g=document.getElementById('opts');
+  q.opts.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-btn'; b.dataset.idx=i;
+    b.innerHTML=`<div class="opt-dot">${L[i]}</div><div><div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:5px">${opt.r} rows × ${opt.c} cols</div>${buildMiniArray(opt.r,opt.c,q.color)}</div>`;
+    b.onclick=()=>checkArrayCircle(i,q.answer);
+    g.appendChild(b);
   });
 }
-
-function selectCircle(btn, isCorrect, chosen, correct) {
-  if (answered) return;
-  answered = true;
-  const allBtns = document.querySelectorAll('#opts .option-btn');
-  allBtns[correct].classList.add('correct');
-  allBtns[correct].querySelector('.option-dot').textContent = '✓';
-  if (!isCorrect) {
-    btn.classList.add('wrong');
-    btn.querySelector('.option-dot').textContent = '✗';
-    showToast('❌ Not quite! The correct one is highlighted', true);
-  } else {
-    score += 10; correctCount++;
-    showToast('✅ Correct! +10', false);
-  }
-  document.getElementById('score-display').textContent = score;
-  document.getElementById('next-btn').classList.add('visible');
+function checkArrayCircle(chosen,correct){
+  if(answered)return; answered=true;
+  const btns=document.querySelectorAll('#opts .opt-btn');
+  btns[correct].classList.add('correct'); btns[correct].querySelector('.opt-dot').textContent='✓';
+  if(chosen!==correct){btns[chosen].classList.add('wrong');btns[chosen].querySelector('.opt-dot').textContent='✗';toast('❌ The correct one is highlighted',true);}
+  else{score+=10;correct_++;correct=correct_;toast('✅ Correct! +10',false);}
+  updateScore(); showNext();
 }
+// fix closure issue
+let correct_ = 0;
 
-// ── WRITE MODE ────────────────────────────────────────────────────────────────
-function renderWrite(area, q) {
-  area.innerHTML = `
-    <div class="question-card">
+// ── ARRAY WRITE ───────────────────────────────────────────────────────────────
+function renderArrayWrite(area,q){
+  area.innerHTML=`
+    <div class="q-card">
       <div class="q-label">Read the Array</div>
-      <div class="q-text">Count the rows and columns!</div>
-      <div class="q-sub">Then write the multiplication equation ✏️</div>
-      <div style="margin-top:16px">${buildArrayHTML(q.rows, q.cols, q.color)}</div>
+      <div class="q-text">Count rows and columns!</div>
+      <div class="q-sub">Write the multiplication equation ✏️</div>
+      <div style="margin-top:14px">${buildArray(q.rows,q.cols,q.color)}</div>
     </div>
-
-    <div class="question-card" style="gap:14px;display:flex;flex-direction:column">
-      <div style="display:flex;gap:12px;align-items:center">
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Rows (↕)</div>
-          <input id="inp-rows" type="number" min="1" max="20" inputmode="numeric"
-            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
-            placeholder="?">
-        </div>
-        <div style="font-size:28px;font-weight:900;color:var(--muted);padding-top:20px">×</div>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Columns (↔)</div>
-          <input id="inp-cols" type="number" min="1" max="20" inputmode="numeric"
-            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
-            placeholder="?">
-        </div>
-        <div style="font-size:28px;font-weight:900;color:var(--muted);padding-top:20px">=</div>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Total</div>
-          <input id="inp-total" type="number" min="1" max="100" inputmode="numeric"
-            style="width:100%;padding:12px 14px;border:3px solid #E8EDFB;border-radius:14px;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text)"
-            placeholder="?">
-        </div>
+    <div class="q-card" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Rows ↕</div><input id="ir" type="number" class="num-input" placeholder="?"></div>
+        <div style="font-size:24px;font-weight:900;color:var(--muted);padding-bottom:8px">×</div>
+        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Cols ↔</div><input id="ic" type="number" class="num-input" placeholder="?"></div>
+        <div style="font-size:24px;font-weight:900;color:var(--muted);padding-bottom:8px">=</div>
+        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Total</div><input id="it" type="number" class="num-input" placeholder="?"></div>
       </div>
-      <button onclick="checkWrite(${q.rowLabel},${q.colLabel},${q.total})"
-        style="background:var(--purple);color:white;border:none;border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;width:100%">
-        Check ✓
-      </button>
-      <div id="write-feedback" style="display:none;text-align:center;font-size:15px;font-weight:700;padding:4px 0"></div>
+      <button onclick="checkArrayWrite(${q.rL},${q.cL},${q.tot})" style="background:var(--purple);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer">Check ✓</button>
+      <div id="wfb" style="display:none;text-align:center;font-size:14px;font-weight:700"></div>
     </div>
-
-    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next →</button>
-  `;
+    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
+}
+function checkArrayWrite(cr,cc,ct){
+  if(answered)return;
+  const r=parseInt(document.getElementById('ir').value);
+  const c=parseInt(document.getElementById('ic').value);
+  const t=parseInt(document.getElementById('it').value);
+  if(!r||!c||!t){toast('⚠️ Fill all boxes!',true);return;}
+  answered=true;
+  const ok=r===cr&&c===cc&&t===ct;
+  ['ir','ic','it'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    const val=[r,c,t][i], exp=[cr,cc,ct][i];
+    el.style.borderColor=val===exp?'var(--grass)':'var(--berry)';
+    el.style.background=val===exp?'var(--grass-l)':'var(--berry-l)';
+  });
+  const fb=document.getElementById('wfb');
+  fb.style.display='block';
+  if(ok){fb.style.color='var(--grass)';fb.textContent=`🎉 Perfect! ${cr}×${cc}=${ct}`;score+=10;correct++;toast('✅ Correct! +10',false);}
+  else{fb.style.color='var(--berry)';fb.textContent=`Answer: ${cr} × ${cc} = ${ct}`;toast('❌ Almost! See the answer',true);}
+  updateScore(); showNext();
 }
 
-function checkWrite(correctRows, correctCols, correctTotal) {
-  if (answered) return;
-  const r = parseInt(document.getElementById('inp-rows').value);
-  const c = parseInt(document.getElementById('inp-cols').value);
-  const t = parseInt(document.getElementById('inp-total').value);
+// ── GENERIC MCQ ──────────────────────────────────────────────────────────────
+function renderMCQ(area,q){
+  const L=['A','B','C','D'];
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="q-label">Choose the correct answer</div>
+      <div class="q-text" style="white-space:pre-line">${q.q}</div>
+      ${q.note?`<div class="q-sub">${q.note}</div>`:''}
+    </div>
+    <div class="options-grid" id="opts"></div>
+    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
+  const g=document.getElementById('opts');
+  q.opts.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt-btn'; b.dataset.opt=String(opt);
+    b.innerHTML=`<div class="opt-dot">${L[i]}</div><span>${opt}</span>`;
+    b.onclick=()=>checkMCQ(b,opt,q.answer);
+    g.appendChild(b);
+  });
+}
+function checkMCQ(btn,chosen,answer){
+  if(answered)return; answered=true;
+  document.querySelectorAll('#opts .opt-btn').forEach(b=>{ if(String(b.dataset.opt)===String(answer)){b.classList.add('correct');b.querySelector('.opt-dot').textContent='✓';}});
+  if(String(chosen)===String(answer)){score+=10;correct++;toast('✅ Correct! +10',false);}
+  else{btn.classList.add('wrong');btn.querySelector('.opt-dot').textContent='✗';toast('❌ Not quite!',true);}
+  updateScore(); showNext();
+}
 
-  if (!r || !c || !t) {
-    showToast('⚠️ Fill in all three boxes!', true);
-    return;
-  }
-
-  answered = true;
-  const rowOk  = r === correctRows;
-  const colOk  = c === correctCols;
-  const totOk  = t === correctTotal;
-  const allOk  = rowOk && colOk && totOk;
-
-  // color inputs
-  const colorOk  = '#E6FAF0';
-  const colorBad = '#FFF0F3';
-  const inputRows  = document.getElementById('inp-rows');
-  const inputCols  = document.getElementById('inp-cols');
-  const inputTotal = document.getElementById('inp-total');
-
-  inputRows.style.borderColor  = rowOk ? 'var(--grass)' : 'var(--berry)';
-  inputRows.style.background   = rowOk ? colorOk : colorBad;
-  inputCols.style.borderColor  = colOk ? 'var(--grass)' : 'var(--berry)';
-  inputCols.style.background   = colOk ? colorOk : colorBad;
-  inputTotal.style.borderColor = totOk ? 'var(--grass)' : 'var(--berry)';
-  inputTotal.style.background  = totOk ? colorOk : colorBad;
-
-  const fb = document.getElementById('write-feedback');
-  fb.style.display = 'block';
-  if (allOk) {
-    fb.style.color = 'var(--grass)';
-    fb.textContent = `🎉 Perfect! ${correctRows} × ${correctCols} = ${correctTotal}`;
-    score += 10; correctCount++;
-    showToast('✅ Correct! +10', false);
+// ── GENERIC WRITE ─────────────────────────────────────────────────────────────
+function renderWrite(area,q){
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="q-label">Write the answer</div>
+      <div class="q-text" style="white-space:pre-line">${q.q}</div>
+      ${q.hint?`<div class="q-sub">💡 ${q.hint}</div>`:''}
+    </div>
+    <div class="q-card" style="display:flex;flex-direction:column;gap:12px">
+      <input id="wans" type="text" class="num-input" style="font-size:22px" placeholder="Your answer">
+      <button onclick="checkWriteGeneric()" style="background:var(--purple);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer">Check ✓</button>
+      <div id="wfb2" style="display:none;text-align:center;font-size:14px;font-weight:700"></div>
+    </div>
+    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
+}
+function checkWriteGeneric(){
+  if(answered)return;
+  const q=questions[curIdx];
+  const inp=document.getElementById('wans');
+  const val=inp.value.trim().toLowerCase();
+  if(!val){toast('⚠️ Write your answer!',true);return;}
+  answered=true;
+  let ok=false;
+  if(q.flex){
+    // for comparisons, accept any valid answer
+    const num=parseFloat(val);
+    if(q.q.includes('>')){ok=!isNaN(num)&&num<q.answer;}
+    else if(q.q.includes('<')){ok=!isNaN(num)&&num>q.answer;}
+    else ok=String(val)===String(q.answer).toLowerCase();
+  } else if(q.display){
+    ok=val===q.display.toLowerCase()||val===q.answer.toLowerCase();
   } else {
-    fb.style.color = 'var(--berry)';
-    fb.textContent = `The answer is ${correctRows} × ${correctCols} = ${correctTotal}`;
-    showToast('❌ Almost! Check the answer', true);
+    ok=parseFloat(val)===parseFloat(q.answer)||val===String(q.answer).toLowerCase();
   }
-
-  document.getElementById('score-display').textContent = score;
-  document.getElementById('next-btn').classList.add('visible');
-}
-
-// ── NEXT / RESULTS ────────────────────────────────────────────────────────────
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex >= questions.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
-}
-
-function showResults() {
-  const total = questions.length;
-  const pct = correctCount / total;
-
-  let emoji, title, sub;
-  if (pct === 1)       { emoji='🏆'; title='Perfect Score!';    sub='You got every single one right!'; }
-  else if (pct >= 0.75){ emoji='🌟'; title='Awesome Job!';      sub='You are an array superstar!'; }
-  else if (pct >= 0.5) { emoji='😊'; title='Good Work!';        sub='Keep practicing and you\'ll get them all!'; }
-  else                 { emoji='💪'; title='Keep Trying!';       sub='Practice makes perfect — you can do it!'; }
-
-  document.getElementById('result-emoji').textContent = emoji;
-  document.getElementById('result-title').textContent = title;
-  document.getElementById('result-sub').textContent = sub;
-  document.getElementById('res-correct').textContent = correctCount;
-  document.getElementById('res-total').textContent = total;
-  document.getElementById('res-score').textContent = score + ' ⭐';
-
-  // stars
-  ['star1','star2','star3'].forEach(id => document.getElementById(id).classList.remove('lit'));
-  setTimeout(() => {
-    if (pct >= 0.4) document.getElementById('star1').classList.add('lit');
-    setTimeout(() => {
-      if (pct >= 0.7) document.getElementById('star2').classList.add('lit');
-      setTimeout(() => {
-        if (pct === 1) document.getElementById('star3').classList.add('lit');
-      }, 300);
-    }, 300);
-  }, 400);
-
-  document.getElementById('play-again-btn').onclick = () => startMode(currentMode);
-
-  showScreen('results');
-}
-
-// ── TOAST ─────────────────────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg, isWrong) {
-  const t = document.getElementById('toast');
-  clearTimeout(toastTimer);
-  t.textContent = msg;
-  t.className = 'feedback-toast' + (isWrong ? ' wrong-toast' : '');
-  void t.offsetWidth;
-  t.classList.add('show');
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  const fb=document.getElementById('wfb2');
+  fb.style.display='block';
+  inp.style.borderColor=ok?'var(--grass)':'var(--berry)';
+  inp.style.background=ok?'var(--grass-l)':'var(--berry-l)';
+  if(ok){fb.style.color='var(--grass)';fb.textContent='🎉 Correct!';score+=10;correct++;toast('✅ Correct! +10',false);}
+  else{fb.style.color='var(--berry)';fb.textContent=`Answer: ${q.display||q.answer}`;toast('❌ Almost!',true);}
+  updateScore(); showNext();
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function buildArrayHTML(rows, cols, color) {
-  let html = '<div style="display:flex;flex-direction:column;gap:6px">';
-  for (let r = 0; r < rows; r++) {
-    html += '<div class="array-row">';
-    for (let c = 0; c < cols; c++) {
-      html += `<div class="array-dot ${color}"></div>`;
-    }
-    html += '</div>';
+function buildArray(rows,cols,color){
+  let h='<div style="display:flex;flex-direction:column;gap:5px">';
+  for(let r=0;r<rows;r++){
+    h+='<div class="array-row">';
+    for(let c=0;c<cols;c++) h+=`<div class="array-dot ${color}"></div>`;
+    h+='</div>';
   }
-  html += '</div>';
-  return html;
+  return h+'</div>';
+}
+function buildMiniArray(rows,cols,color){
+  let h='<div class="mini-array">';
+  for(let r=0;r<rows;r++){
+    h+='<div class="mini-row">';
+    for(let c=0;c<cols;c++) h+=`<div class="mini-dot" style="background:var(--${color})"></div>`;
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function updateScore(){document.getElementById('score-display').textContent=score;}
+function showNext(){document.getElementById('nxt').classList.add('visible');}
+function nextQ(){
+  curIdx++;
+  if(curIdx>=questions.length) showResults();
+  else renderQ();
 }
 
-function buildMiniArrayHTML(rows, cols, color) {
-  let html = '<div class="mini-array">';
-  for (let r = 0; r < rows; r++) {
-    html += '<div class="mini-row">';
-    for (let c = 0; c < cols; c++) {
-      html += `<div class="mini-dot" style="background:var(--${color})"></div>`;
-    }
-    html += '</div>';
-  }
-  html += '</div>';
-  return html;
+// ── RESULTS ───────────────────────────────────────────────────────────────────
+function showResults(){
+  const total=questions.length;
+  const pct=correct/total;
+  const grade=Math.round(pct*10*10)/10;
+
+  let emoji,title,sub,desc;
+  if(pct===1){emoji='🏆';title='Perfect Score!';sub='You got every one right!';}
+  else if(pct>=.8){emoji='🌟';title='Excellent!';sub='You\'re almost perfect!';}
+  else if(pct>=.6){emoji='😊';title='Good Job!';sub='Keep practicing!';}
+  else if(pct>=.4){emoji='💪';title='Keep Trying!';sub='You can do better!';}
+  else{emoji='📚';title='Need More Practice';sub='Review the topic and try again!';}
+
+  if(grade>=9)desc='Outstanding! 🏆';
+  else if(grade>=7)desc='Great work! 🌟';
+  else if(grade>=5)desc='Good effort! 😊';
+  else desc='Keep studying! 💪';
+
+  document.getElementById('res-emoji').textContent=emoji;
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-sub').textContent=sub;
+  document.getElementById('r-correct').textContent=correct;
+  document.getElementById('r-total').textContent=total;
+  document.getElementById('r-score').textContent=score+' ⭐';
+  document.getElementById('grade-num').textContent=grade.toFixed(1);
+  document.getElementById('grade-desc').textContent=desc;
+
+  ['s1','s2','s3'].forEach(id=>document.getElementById(id).classList.remove('lit'));
+  setTimeout(()=>{
+    if(pct>=.4)document.getElementById('s1').classList.add('lit');
+    setTimeout(()=>{
+      if(pct>=.7)document.getElementById('s2').classList.add('lit');
+      setTimeout(()=>{if(pct===1)document.getElementById('s3').classList.add('lit');},300);
+    },300);
+  },400);
+
+  document.getElementById('play-again-btn').onclick=()=>startGame(curSubject,curMode,document.getElementById('game-title').textContent);
+  show('results');
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+// fix array circle correct count
+function checkArrayCircle(chosen,correctIdx){
+  if(answered)return; answered=true;
+  const btns=document.querySelectorAll('#opts .opt-btn');
+  btns[correctIdx].classList.add('correct'); btns[correctIdx].querySelector('.opt-dot').textContent='✓';
+  if(chosen!==correctIdx){btns[chosen].classList.add('wrong');btns[chosen].querySelector('.opt-dot').textContent='✗';toast('❌ The correct one is highlighted',true);}
+  else{score+=10;correct++;toast('✅ Correct! +10',false);}
+  updateScore(); showNext();
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg,isWrong){
+  const t=document.getElementById('toast');
+  clearTimeout(toastTimer);
+  t.textContent=msg;
+  t.className='toast'+(isWrong?' wrong-t':'');
+  void t.offsetWidth;
+  t.classList.add('show');
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
 }
 </script>
 </body>
