@@ -1,775 +1,1114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Math Adventure ⭐</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alice Adventure 🚀</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
-:root {
-  --sky:#5B9EF5; --sky-l:#EBF3FF;
-  --sun:#FFB830; --sun-l:#FFF4D6;
-  --grass:#4DC87A; --grass-l:#E6FAF0;
-  --berry:#F56B8A; --berry-l:#FFF0F3;
-  --purple:#9B6EF3; --purple-l:#F3EEFF;
-  --teal:#2ABFBF; --teal-l:#E0FAFA;
-  --orange:#FF7043; --orange-l:#FFF3EF;
-  --pink:#E91E8C; --pink-l:#FFE8F5;
-  --indigo:#5C6BC0; --indigo-l:#ECEEFF;
-  --bg:#F7F9FF; --card:#fff; --text:#1E1E2E; --muted:#8892A4;
-  --radius:20px; --shadow:0 4px 20px rgba(91,158,245,.13);
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.screen{display:none;min-height:100vh;flex-direction:column}
-.screen.active{display:flex}
+  :root {
+    --bg: #0f0e17;
+    --card: #1a1929;
+    --card2: #222136;
+    --border: #2e2c4a;
+    --text: #eaeaea;
+    --muted: #8b89a8;
+    --mat: #ff6b6b;
+    --sci: #4ecdc4;
+    --his: #ffd93d;
+    --geo: #6bcb77;
+    --purple: #a855f7;
+    --correct: #4ade80;
+    --wrong: #f87171;
+    --radius: 16px;
+    --gap: 12px;
+  }
 
-/* HOME */
-#home{align-items:center;justify-content:flex-start;padding:32px 20px 40px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 60%);gap:0;overflow-y:auto}
-.hero{text-align:center;margin-bottom:28px}
-.hero-emoji{font-size:72px;animation:bob 2.4s ease-in-out infinite;display:block;margin-bottom:8px}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.home-title{font-size:34px;font-weight:900;line-height:1.1;margin-bottom:6px}
-.home-title span{color:var(--sky)}
-.home-sub{font-size:15px;color:var(--muted);font-weight:600}
-.subject-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px}
-.subject-card{background:var(--card);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;box-shadow:var(--shadow);cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;text-align:left}
-.subject-card:active{transform:scale(.96)}
-.s-icon{font-size:32px;line-height:1}
-.s-title{font-size:15px;font-weight:900;line-height:1.2}
-.s-desc{font-size:11px;color:var(--muted);font-weight:600}
-.subject-card.c0{border-color:var(--sky)}
-.subject-card.c1{border-color:var(--sun)}
-.subject-card.c2{border-color:var(--grass)}
-.subject-card.c3{border-color:var(--berry)}
-.subject-card.c4{border-color:var(--purple)}
-.subject-card.c5{border-color:var(--teal)}
-.subject-card.c6{border-color:var(--orange)}
-.subject-card.c7{border-color:var(--pink)}
-.subject-card.c8{border-color:var(--indigo)}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* GAME HEADER */
-.game-header{background:var(--card);padding:12px 16px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.06);position:sticky;top:0;z-index:10;flex-shrink:0}
-.back-btn{background:var(--sky-l);border:none;border-radius:12px;width:36px;height:36px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.game-title{font-size:15px;font-weight:900;flex:1}
-.score-pill{background:var(--sun-l);border-radius:20px;padding:5px 11px;font-size:13px;font-weight:800;color:#B8860B;display:flex;align-items:center;gap:3px;white-space:nowrap}
-.progress-wrap{padding:8px 16px 0;background:var(--card);flex-shrink:0}
-.progress-bar{height:7px;background:#E8EDFB;border-radius:99px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--purple));border-radius:99px;transition:width .5s ease}
-.progress-label{font-size:11px;color:var(--muted);font-weight:700;text-align:right;padding:3px 0 6px}
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
 
-/* QUESTION AREA */
-.question-area{flex:1;padding:16px 16px 28px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
-.q-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow)}
-.q-label{font-size:12px;font-weight:800;color:var(--sky);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.q-text{font-size:19px;font-weight:900;line-height:1.3}
-.q-sub{font-size:13px;color:var(--muted);font-weight:600;margin-top:4px}
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; }
 
-/* OPTIONS */
-.options-grid{display:flex;flex-direction:column;gap:10px}
-.opt-btn{background:var(--card);border:3px solid #E8EDFB;border-radius:14px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s,background .15s,transform .12s;text-align:left;width:100%}
-.opt-btn:active{transform:scale(.98)}
-.opt-btn.correct{border-color:var(--grass);background:var(--grass-l)}
-.opt-btn.wrong{border-color:var(--berry);background:var(--berry-l)}
-.opt-dot{width:30px;height:30px;border-radius:50%;background:var(--sky-l);color:var(--sky);font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.opt-btn.correct .opt-dot{background:var(--grass);color:#fff}
-.opt-btn.wrong .opt-dot{background:var(--berry);color:#fff}
+  /* ── HEADER ── */
+  .app-header {
+    text-align: center;
+    padding: 24px 0 20px;
+  }
+  .app-header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #a855f7, #ff6b6b, #ffd93d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  .app-header p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 
-/* MINI ARRAY */
-.mini-array{display:flex;flex-direction:column;gap:3px}
-.mini-row{display:flex;gap:3px}
-.mini-dot{width:13px;height:13px;border-radius:50%;opacity:.8}
+  /* ── DISCIPLINE GRID ── */
+  .disc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+    margin-top: 8px;
+  }
+  .disc-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: transform .15s, border-color .15s;
+    user-select: none;
+  }
+  .disc-card:active { transform: scale(.96); }
+  .disc-card .emoji { font-size: 36px; display: block; margin-bottom: 8px; }
+  .disc-card .name { font-weight: 800; font-size: 15px; }
+  .disc-card .sub  { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .disc-card[data-disc="mat"]  { border-color: var(--mat);  }
+  .disc-card[data-disc="sci"]  { border-color: var(--sci);  }
+  .disc-card[data-disc="his"]  { border-color: var(--his);  }
+  .disc-card[data-disc="geo"]  { border-color: var(--geo);  }
+  .disc-card[data-disc="mat"]:hover  { background: #2a1f1f; }
+  .disc-card[data-disc="sci"]:hover  { background: #1a2a2a; }
+  .disc-card[data-disc="his"]:hover  { background: #2a2a1a; }
+  .disc-card[data-disc="geo"]:hover  { background: #1a2a1f; }
 
-/* NEXT BTN */
-.next-btn{background:var(--sky);color:#fff;border:none;border-radius:14px;padding:14px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;width:100%;display:none;margin-top:2px;box-shadow:0 4px 16px rgba(91,158,245,.4);transition:transform .12s}
-.next-btn:active{transform:scale(.98)}
-.next-btn.visible{display:block}
+  /* ── TOPIC LIST ── */
+  .topic-list { margin-top: 8px; display: flex; flex-direction: column; gap: var(--gap); }
+  .topic-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform .12s;
+  }
+  .topic-btn:active { transform: scale(.97); }
+  .topic-btn .t-emoji { font-size: 22px; flex-shrink: 0; }
+  .topic-btn .t-sub { font-size: 12px; color: var(--muted); font-weight: 600; }
 
-/* ARRAY DOTS */
-.array-dot{width:24px;height:24px;border-radius:50%}
-.array-dot.sky{background:var(--sky)}
-.array-dot.sun{background:var(--sun)}
-.array-dot.grass{background:var(--grass)}
-.array-dot.berry{background:var(--berry)}
-.array-dot.purple{background:var(--purple)}
-.array-dot.teal{background:var(--teal)}
-.array-row{display:flex;gap:5px}
+  /* ── MODE SELECT ── */
+  .mode-grid { display: flex; flex-direction: column; gap: var(--gap); margin-top: 8px; }
+  .mode-btn {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    transition: border-color .12s, transform .12s;
+  }
+  .mode-btn:active { transform: scale(.97); }
+  .mode-btn .m-emoji { font-size: 24px; }
+  .mode-btn .m-desc { font-size: 12px; color: var(--muted); font-weight: 600; }
 
-/* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--grass);color:#fff;border-radius:14px;padding:12px 22px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px rgba(77,200,122,.35);transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .35s;opacity:0;z-index:100;white-space:nowrap}
-.toast.wrong-t{background:var(--berry);box-shadow:0 8px 32px rgba(245,107,138,.35)}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  /* ── BACK + NAV ── */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .back-btn {
+    background: var(--card2);
+    border: none;
+    border-radius: 10px;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-title { font-weight: 800; font-size: 16px; flex: 1; }
 
-/* NUMBER INPUT */
-.num-input{width:100%;padding:11px 12px;border:3px solid #E8EDFB;border-radius:12px;font-size:20px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;color:var(--text);background:#fff}
-.num-input:focus{border-color:var(--sky)}
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
 
-/* RESULTS */
-#results{align-items:center;justify-content:center;padding:36px 20px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 70%);text-align:center;gap:0;overflow-y:auto}
-.res-emoji{font-size:88px;margin-bottom:10px}
-.res-title{font-size:28px;font-weight:900;margin-bottom:4px}
-.res-sub{font-size:15px;color:var(--muted);font-weight:600;margin-bottom:24px}
-.stars-row{display:flex;justify-content:center;gap:6px;margin-bottom:24px}
-.star{font-size:44px;opacity:.2;transition:opacity .4s,transform .4s}
-.star.lit{opacity:1;transform:scale(1.15)}
-.res-card{background:var(--card);border-radius:var(--radius);padding:18px 24px;width:100%;max-width:340px;box-shadow:var(--shadow);margin-bottom:24px}
-.res-stat{display:flex;justify-content:space-between;align-items:center;padding:9px 0}
-.res-stat+.res-stat{border-top:1px solid #F0F3FA}
-.res-stat .sl{font-size:14px;font-weight:700;color:var(--muted)}
-.res-stat .sv{font-size:19px;font-weight:900}
-.grade-box{background:var(--sun-l);border-radius:16px;padding:16px 24px;margin-bottom:20px;width:100%;max-width:340px}
-.grade-label{font-size:13px;font-weight:700;color:#B8860B;margin-bottom:4px}
-.grade-num{font-size:52px;font-weight:900;color:#B8860B;line-height:1}
-.grade-desc{font-size:14px;font-weight:700;color:#B8860B;margin-top:2px}
-.play-btn{background:var(--sky);color:#fff;border:none;border-radius:14px;padding:14px 36px;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(91,158,245,.4);margin-bottom:10px}
-.home-btn-link{background:none;border:none;color:var(--muted);font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+  /* ── QUIZ ── */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 8px;
+    height: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: var(--purple);
+    transition: width .3s ease;
+  }
 
-/* MODULE SELECT */
-#module-select{align-items:center;justify-content:flex-start;padding:20px 16px 36px;background:linear-gradient(160deg,#EBF3FF 0%,#F7F9FF 60%);overflow-y:auto}
-.ms-header{display:flex;align-items:center;gap:10px;margin-bottom:24px;width:100%}
-.ms-back{background:var(--sky-l);border:none;border-radius:12px;width:36px;height:36px;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ms-title{font-size:18px;font-weight:900}
-.mode-cards{display:flex;flex-direction:column;gap:12px;width:100%}
-.mode-card{background:var(--card);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s;text-align:left}
-.mode-card:active{transform:scale(.97)}
-.mode-icon{font-size:36px;flex-shrink:0}
-.mode-info h3{font-size:16px;font-weight:900}
-.mode-info p{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .question-num {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .question-text {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+  .question-hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-style: italic;
+  }
 
-/* TALLY */
-.tally-mark{font-size:22px;font-weight:900;letter-spacing:-2px;color:var(--text)}
+  .options-list { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn {
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .12s, background .12s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-btn .opt-letter {
+    background: var(--border);
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .option-btn:disabled { cursor: default; }
+  .option-btn.correct  { border-color: var(--correct); background: #052214; }
+  .option-btn.wrong    { border-color: var(--wrong);   background: #200d0d; }
+  .option-btn.correct .opt-letter { background: var(--correct); color: #000; }
+  .option-btn.wrong   .opt-letter { background: var(--wrong);   color: #000; }
 
-/* MONEY */
-.money-item{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800}
-.money-coin{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff;flex-shrink:0}
+  .feedback-bar {
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 12px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .feedback-bar.correct-fb { background: #052214; border: 2px solid var(--correct); color: var(--correct); display: flex; }
+  .feedback-bar.wrong-fb   { background: #200d0d; border: 2px solid var(--wrong);   color: var(--wrong);   display: flex; }
+  .feedback-bar .fb-icon { font-size: 20px; }
+  .feedback-bar .fb-text { font-size: 13px; }
 
-/* Comparison */
-.cmp-number{font-size:36px;font-weight:900;color:var(--sky);text-align:center;margin:8px 0}
-.cmp-symbol{font-size:28px;font-weight:900;color:var(--muted);text-align:center}
+  .next-btn {
+    width: 100%;
+    background: var(--purple);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+    display: none;
+    transition: opacity .12s;
+  }
+  .next-btn:hover { opacity: .88; }
+
+  /* ── RESULT ── */
+  .result-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    padding: 28px 20px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .result-grade {
+    font-size: 56px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .result-label { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+  .result-score { font-size: 18px; font-weight: 800; }
+  .result-emoji { font-size: 40px; margin-top: 12px; display: block; }
+
+  .result-actions { display: flex; flex-direction: column; gap: 10px; }
+  .result-btn {
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px;
+    cursor: pointer;
+  }
+  .result-btn.primary { background: var(--purple); border-color: var(--purple); color: #fff; }
+
+  /* ── ERROR LOG ── */
+  .error-log-title {
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+  .error-log-sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+  .error-item {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .error-item .ei-q { font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+  .ei-row { font-size: 13px; margin-bottom: 4px; display: flex; gap: 6px; }
+  .ei-row .ei-label { font-weight: 800; flex-shrink: 0; }
+  .ei-row.wrong-ans { color: var(--wrong); }
+  .ei-row.right-ans { color: var(--correct); }
+  .clear-errors-btn {
+    background: #200d0d;
+    border: 2px solid var(--wrong);
+    border-radius: 12px;
+    color: var(--wrong);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .empty-state .es-emoji { font-size: 40px; display: block; margin-bottom: 10px; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--card);
+    border-top: 2px solid var(--border);
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .bn-btn {
+    flex: 1;
+    padding: 12px 0 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: color .12s;
+  }
+  .bn-btn .bn-icon { font-size: 20px; }
+  .bn-btn.active { color: var(--purple); }
+
+  body { padding-bottom: 70px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--card);
+    border: 2px solid var(--purple);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: transform .3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── COLOR TAGS ── */
+  .tag {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    margin-left: 6px;
+  }
+  .tag-mat { background: #3a1515; color: var(--mat); }
+  .tag-sci { background: #0f2a28; color: var(--sci); }
+  .tag-his { background: #2a2710; color: var(--his); }
+  .tag-geo { background: #0f2a18; color: var(--geo); }
 </style>
 </head>
 <body>
 
-<!-- HOME -->
-<div id="home" class="screen active">
-  <div class="hero">
-    <span class="hero-emoji">🎓</span>
-    <h1 class="home-title">Math<br><span>Adventure</span></h1>
-    <p class="home-sub">Choose a topic to practice!</p>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bn-btn active" id="bnHome" onclick="showMainMenu()">
+    <span class="bn-icon">🏠</span>Home
+  </button>
+  <button class="bn-btn" id="bnErrors" onclick="showErrors()">
+    <span class="bn-icon">📋</span>Erros
+  </button>
+</nav>
+
+<!-- ══════════════════ SCREEN: HOME ══════════════════ -->
+<div class="screen active" id="screenHome">
+  <div class="app-header">
+    <h1>Alice Adventure 🚀</h1>
+    <p>2º Bimestre — escolha a disciplina!</p>
   </div>
-  <div class="subject-grid" id="subject-grid"></div>
+  <p class="section-label">Disciplinas</p>
+  <div class="disc-grid">
+    <div class="disc-card" data-disc="mat" onclick="showTopics('mat')">
+      <span class="emoji">🔢</span>
+      <div class="name">Matemática</div>
+      <div class="sub">Inglês</div>
+    </div>
+    <div class="disc-card" data-disc="sci" onclick="showTopics('sci')">
+      <span class="emoji">🔬</span>
+      <div class="name">Science</div>
+      <div class="sub">Inglês</div>
+    </div>
+    <div class="disc-card" data-disc="his" onclick="showTopics('his')">
+      <span class="emoji">📚</span>
+      <div class="name">História</div>
+      <div class="sub">Português</div>
+    </div>
+    <div class="disc-card" data-disc="geo" onclick="showTopics('geo')">
+      <span class="emoji">🗺️</span>
+      <div class="name">Geografia</div>
+      <div class="sub">Português</div>
+    </div>
+  </div>
 </div>
 
-<!-- MODULE SELECT -->
-<div id="module-select" class="screen">
-  <div class="ms-header">
-    <button class="ms-back" onclick="goHome()">←</button>
-    <div class="ms-title" id="ms-title">Choose a mode</div>
+<!-- ══════════════════ SCREEN: TOPICS ══════════════════ -->
+<div class="screen" id="screenTopics">
+  <div class="nav-row">
+    <button class="back-btn" onclick="showMainMenu()">← Voltar</button>
+    <span class="nav-title" id="topicsTitle"></span>
   </div>
-  <div class="mode-cards" id="mode-cards"></div>
+  <p class="section-label">Tópicos</p>
+  <div class="topic-list" id="topicList"></div>
 </div>
 
-<!-- GAME -->
-<div id="game" class="screen">
-  <div class="game-header">
-    <button class="back-btn" onclick="goHome()">←</button>
-    <div class="game-title" id="game-title"></div>
-    <div class="score-pill">⭐ <span id="score-display">0</span></div>
+<!-- ══════════════════ SCREEN: MODE ══════════════════ -->
+<div class="screen" id="screenMode">
+  <div class="nav-row">
+    <button class="back-btn" id="modeBack">← Voltar</button>
+    <span class="nav-title" id="modeTitle"></span>
   </div>
-  <div class="progress-wrap">
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">Question 1 of 8</div>
-  </div>
-  <div class="question-area" id="question-area"></div>
+  <p class="section-label">Modo de jogo</p>
+  <div class="mode-grid" id="modeGrid"></div>
 </div>
 
-<!-- RESULTS -->
-<div id="results" class="screen">
-  <div class="res-emoji" id="res-emoji">🎉</div>
-  <div class="res-title" id="res-title">Amazing!</div>
-  <div class="res-sub" id="res-sub">You're a superstar!</div>
-  <div class="stars-row">
-    <div class="star" id="s1">⭐</div>
-    <div class="star" id="s2">⭐</div>
-    <div class="star" id="s3">⭐</div>
+<!-- ══════════════════ SCREEN: QUIZ ══════════════════ -->
+<div class="screen" id="screenQuiz">
+  <div class="nav-row">
+    <button class="back-btn" onclick="quitQuiz()">✕ Sair</button>
+    <span class="nav-title" id="quizTitle"></span>
   </div>
-  <div class="grade-box">
-    <div class="grade-label">Your simulated grade</div>
-    <div class="grade-num" id="grade-num">10</div>
-    <div class="grade-desc" id="grade-desc">Outstanding!</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
   </div>
-  <div class="res-card">
-    <div class="res-stat"><span class="sl">Correct</span><span class="sv" id="r-correct">0</span></div>
-    <div class="res-stat"><span class="sl">Total</span><span class="sv" id="r-total">0</span></div>
-    <div class="res-stat"><span class="sl">Score</span><span class="sv" id="r-score">0 ⭐</span></div>
+  <div class="question-card">
+    <div class="question-num" id="questionNum"></div>
+    <div class="question-text" id="questionText"></div>
+    <div class="question-hint" id="questionHint"></div>
   </div>
-  <button class="play-btn" id="play-again-btn">Play Again 🔁</button>
-  <button class="home-btn-link" onclick="goHome()">← Back to Home</button>
+  <div class="options-list" id="optionsList"></div>
+  <div class="feedback-bar" id="feedbackBar">
+    <span class="fb-icon" id="fbIcon"></span>
+    <div>
+      <div id="fbMain"></div>
+      <div class="fb-text" id="fbSub"></div>
+    </div>
+  </div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Próxima →</button>
 </div>
 
-<div class="toast" id="toast">✅ Correct!</div>
+<!-- ══════════════════ SCREEN: RESULT ══════════════════ -->
+<div class="screen" id="screenResult">
+  <div class="result-card">
+    <div class="result-grade" id="resultGrade"></div>
+    <div class="result-label">Nota simulada (de 10)</div>
+    <div class="result-score" id="resultScore"></div>
+    <span class="result-emoji" id="resultEmoji"></span>
+  </div>
+  <div class="result-actions">
+    <button class="result-btn primary" onclick="retryQuiz()">🔄 Tentar de novo</button>
+    <button class="result-btn" onclick="showErrors()">📋 Ver meus erros</button>
+    <button class="result-btn" onclick="showMainMenu()">🏠 Menu principal</button>
+  </div>
+</div>
+
+<!-- ══════════════════ SCREEN: ERRORS ══════════════════ -->
+<div class="screen" id="screenErrors">
+  <div class="nav-row">
+    <button class="back-btn" onclick="showMainMenu()">← Voltar</button>
+    <span class="nav-title">Meus Erros</span>
+  </div>
+  <div class="error-log-title">📋 Painel de Erros</div>
+  <div class="error-log-sub">Aqui ficam guardadas as questões que você errou.</div>
+  <div id="errorLogList"></div>
+</div>
 
 <script>
-// ── SUBJECTS ────────────────────────────────────────────────────────────────
-const SUBJECTS = [
-  { id:'arrays',   icon:'🔢', title:'Arrays',           desc:'Multiplication with dot arrays', color:'c0' },
-  { id:'addition', icon:'➕', title:'Addition',          desc:'Number pairs & multi-step', color:'c1' },
-  { id:'equal',    icon:'⚖️', title:'Equal or Not',      desc:'Same value, different forms', color:'c2' },
-  { id:'place',    icon:'🏠', title:'Tens & Ones',       desc:'Place value & compare numbers', color:'c3' },
-  { id:'tally',    icon:'📊', title:'Tally & Graphs',    desc:'Read charts and block graphs', color:'c4' },
-  { id:'time',     icon:'📅', title:'Days & Months',     desc:'Calendar and time', color:'c5' },
-  { id:'money',    icon:'💰', title:'Money',             desc:'Dollars and cents', color:'c6' },
-  { id:'chance',   icon:'🎲', title:'Probability',       desc:'Good, small, equal chance', color:'c7' },
-  { id:'pictogram',icon:'📈', title:'Pictograms',        desc:'Read picture graphs', color:'c8' },
-];
+// ══════════════════════════════════════════════
+//  DATA — QUESTÕES POR DISCIPLINA / TÓPICO / MODO
+// ══════════════════════════════════════════════
 
-const MODES = {
-  arrays:    [{id:'match',  icon:'🔗', title:'Match It!',            desc:'Match the array to its description'},
-              {id:'circle', icon:'⭕', title:'Pick the Right Array',  desc:'Choose which array matches the multiplication'},
-              {id:'write',  icon:'✏️', title:'Read the Array',        desc:'Count rows and columns, write the equation'}],
-  addition:  [{id:'circle', icon:'⭕', title:'Circle the Answer',     desc:'Choose the correct total'},
-              {id:'write',  icon:'✏️', title:'Complete the Sentence', desc:'Fill in the missing number'}],
-  equal:     [{id:'circle', icon:'⭕', title:'Are They Equal?',       desc:'Pick which expressions are equal'},
-              {id:'write',  icon:'✏️', title:'Find the Match',        desc:'Write the matching value'}],
-  place:     [{id:'circle', icon:'⭕', title:'Tens & Ones Quiz',      desc:'Identify the place value'},
-              {id:'write',  icon:'✏️', title:'Compare Numbers',       desc:'Use > or < to compare'}],
-  tally:     [{id:'circle', icon:'⭕', title:'Read the Tally',        desc:'Count tally marks and answer'},
-              {id:'circle2',icon:'📊', title:'Read the Bar Graph',    desc:'Answer questions about bar graphs'}],
-  time:      [{id:'circle', icon:'📅', title:'Days Quiz',             desc:'Order and identify days & months'},
-              {id:'write',  icon:'✏️', title:'Months Quiz',           desc:'What comes before or after?'}],
-  money:     [{id:'circle', icon:'💰', title:'Money Values',          desc:'Match amounts to descriptions'},
-              {id:'write',  icon:'✏️', title:'Count the Money',       desc:'Add up dollars and cents'}],
-  chance:    [{id:'circle', icon:'🎲', title:'What\'s the Chance?',   desc:'Good, small or equal chance?'}],
-  pictogram: [{id:'circle', icon:'📈', title:'Read the Pictogram',    desc:'Answer questions from picture charts'}],
+const DISCIPLINES = {
+  mat: { name: "Matemática 🔢", color: "mat", topics: [
+    { id:"arrays",   name:"Arrays",              emoji:"⬛", modes:["mc","match"] },
+    { id:"addition", name:"Adição",              emoji:"➕", modes:["mc","fill"] },
+    { id:"equal",    name:"Equal or Not Equal",  emoji:"⚖️", modes:["mc"] },
+    { id:"tens",     name:"Tens & Ones",         emoji:"🔟", modes:["mc","fill"] },
+    { id:"tally",    name:"Tally & Graphs",      emoji:"📊", modes:["mc"] },
+    { id:"days",     name:"Days & Months",       emoji:"📅", modes:["mc","fill"] },
+    { id:"money",    name:"Money",               emoji:"💰", modes:["mc"] },
+    { id:"prob",     name:"Probability",         emoji:"🎲", modes:["mc"] },
+    { id:"picto",    name:"Pictograms",          emoji:"🖼️", modes:["mc"] },
+  ]},
+  sci: { name: "Science 🔬", color: "sci", topics: [
+    { id:"forces",   name:"Squash, Bend & Stretch", emoji:"🤸", modes:["mc","fill"] },
+    { id:"heat",     name:"Heat & Cool",         emoji:"🌡️", modes:["mc"] },
+    { id:"dissolve", name:"Dissolve in Water",   emoji:"💧", modes:["mc"] },
+    { id:"rocks",    name:"Rocks",               emoji:"🪨", modes:["mc","fill"] },
+    { id:"manmade",  name:"Natural vs Man-made", emoji:"🏭", modes:["mc"] },
+  ]},
+  his: { name: "História 📚", color: "his", topics: [
+    { id:"fontes",   name:"Fontes Históricas",   emoji:"📜", modes:["mc","fill"] },
+    { id:"bairros",  name:"Bairros e Ruas",      emoji:"🏘️", modes:["mc"] },
+    { id:"profissoes", name:"Profissões",        emoji:"👷", modes:["mc","fill"] },
+    { id:"trabalho", name:"Trabalho no Campo",   emoji:"🌾", modes:["mc"] },
+    { id:"lei",      name:"Leis e IA",           emoji:"⚖️", modes:["mc"] },
+  ]},
+  geo: { name: "Geografia 🗺️", color: "geo", topics: [
+    { id:"bairro",   name:"O que é um Bairro",  emoji:"🏘️", modes:["mc","fill"] },
+    { id:"tipos",    name:"Tipos de Bairro",     emoji:"🏙️", modes:["mc"] },
+    { id:"zonas",    name:"Zona Rural × Urbana", emoji:"🌾", modes:["mc","fill"] },
+    { id:"vizinhos", name:"Vizinhos e Convivência", emoji:"🤝", modes:["mc"] },
+    { id:"periodo",  name:"Períodos do Dia",     emoji:"☀️", modes:["mc","fill"] },
+    { id:"profgeo",  name:"Profissões por Turno",emoji:"👩‍⚕️", modes:["mc"] },
+    { id:"estab",    name:"Estabelecimentos",    emoji:"🏪", modes:["mc","fill"] },
+    { id:"campo",    name:"Vida no Campo",       emoji:"🐄", modes:["mc"] },
+    { id:"extrat",   name:"Extrativismo",        emoji:"⛏️", modes:["mc","fill"] },
+    { id:"repres",   name:"Representar Espaços", emoji:"🗺️", modes:["mc"] },
+  ]},
 };
 
-// ── QUESTIONS ──────────────────────────────────────────────────────────────
-const Q = {};
+const MODES = {
+  mc:    { name:"Quiz Múltipla Escolha", emoji:"🎯", desc:"4 opções, escolha a certa" },
+  fill:  { name:"Completar a Frase",    emoji:"✏️", desc:"Escolha a palavra que falta" },
+  match: { name:"Associar",             emoji:"🔗", desc:"Ligue o conceito ao exemplo" },
+};
 
-Q.arrays_match = [
-  {rows:3,cols:4,label:'3 groups of 4',color:'sky'},
-  {rows:2,cols:6,label:'2 groups of 6',color:'sun'},
-  {rows:5,cols:2,label:'5 groups of 2',color:'grass'},
-  {rows:4,cols:3,label:'4 groups of 3',color:'berry'},
-  {rows:3,cols:5,label:'3 groups of 5',color:'purple'},
-  {rows:2,cols:8,label:'2 groups of 8',color:'teal'},
-  {rows:6,cols:2,label:'6 groups of 2',color:'sky'},
-  {rows:4,cols:5,label:'4 groups of 5',color:'sun'},
-];
+// ── QUESTION BANK ──────────────────────────────────────────────
 
-Q.arrays_circle = [
-  {mult:'3 × 4',rows:3,cols:4,answer:0,color:'sky',   opts:[{r:3,c:4},{r:2,c:5},{r:4,c:3}]},
-  {mult:'5 × 3',rows:5,cols:3,answer:1,color:'berry', opts:[{r:3,c:4},{r:5,c:3},{r:3,c:6}]},
-  {mult:'2 × 8',rows:2,cols:8,answer:2,color:'sun',   opts:[{r:4,c:4},{r:3,c:5},{r:2,c:8}]},
-  {mult:'4 × 4',rows:4,cols:4,answer:0,color:'purple',opts:[{r:4,c:4},{r:2,c:8},{r:8,c:2}]},
-  {mult:'6 × 2',rows:6,cols:2,answer:1,color:'grass', opts:[{r:3,c:4},{r:6,c:2},{r:2,c:6}]},
-  {mult:'3 × 6',rows:3,cols:6,answer:2,color:'teal',  opts:[{r:6,c:3},{r:2,c:9},{r:3,c:6}]},
-  {mult:'5 × 4',rows:5,cols:4,answer:0,color:'sky',   opts:[{r:5,c:4},{r:4,c:5},{r:2,c:10}]},
-  {mult:'7 × 2',rows:7,cols:2,answer:1,color:'berry', opts:[{r:2,c:7},{r:7,c:2},{r:4,c:3}]},
-];
+const QUESTIONS = {
 
-Q.arrays_write = [
-  {rows:3,cols:5,color:'purple',rL:3,cL:5,tot:15},
-  {rows:4,cols:4,color:'sun',   rL:4,cL:4,tot:16},
-  {rows:6,cols:3,color:'sky',   rL:6,cL:3,tot:18},
-  {rows:2,cols:7,color:'grass', rL:2,cL:7,tot:14},
-  {rows:5,cols:5,color:'berry', rL:5,cL:5,tot:25},
-  {rows:3,cols:6,color:'teal',  rL:3,cL:6,tot:18},
-  {rows:4,cols:6,color:'sky',   rL:4,cL:6,tot:24},
-  {rows:2,cols:9,color:'sun',   rL:2,cL:9,tot:18},
-];
+  // ──────── MATEMÁTICA ────────
 
-Q.addition_circle = [
-  {q:'6 + 2 + 4 = ?',  answer:12, opts:[10,12,14]},
-  {q:'5 + 2 + 8 = ?',  answer:15, opts:[13,15,17]},
-  {q:'3 + 4 + 7 = ?',  answer:14, opts:[12,14,16]},
-  {q:'8 + 3 + 2 + 3 = ?', answer:16, opts:[14,16,18]},
-  {q:'9 + 6 + 4 + 3 + 1 = ?', answer:23, opts:[21,23,25]},
-  {q:'4 + 7 + 3 + 5 = ?', answer:19, opts:[17,19,21]},
-  {q:'5 + 7 + 2 + 3 = ?', answer:17, opts:[15,17,19]},
-  {q:'8 + 5 + 3 + 2 = ?', answer:18, opts:[16,18,20]},
-];
+  mat_arrays: [
+    { q:"What does a 3×4 array mean?", a:"3 rows and 4 columns", opts:["3 rows and 4 columns","4 rows and 3 items","7 total things","3 rows and 4 rows"], hint:"Rows × Columns" },
+    { q:"An array has 2 rows and 5 columns. How many items in total?", a:"10", opts:["10","7","12","15"], hint:"Multiply rows × columns" },
+    { q:"Which multiplication matches a 4×3 array?", a:"4 × 3 = 12", opts:["4 × 3 = 12","3 × 4 = 7","4 + 3 = 7","4 × 3 = 10"], hint:"Rows × Columns = Total" },
+    { q:"An array has 3 rows and 3 columns. How many items?", a:"9", opts:["9","6","12","3"], hint:"3 × 3 = ?" },
+    { q:"Which describes this array: ⬛⬛ / ⬛⬛ / ⬛⬛ ?", a:"3 rows, 2 columns", opts:["3 rows, 2 columns","2 rows, 3 columns","6 rows","2 columns, 2 rows"], hint:"Count rows top to bottom, columns left to right" },
+    { q:"5 rows and 2 columns. Total?", a:"10", opts:["10","7","15","12"], hint:"5 × 2 = ?" },
+    { q:"Arrays help us understand which math operation?", a:"Multiplication", opts:["Multiplication","Division","Subtraction","Fractions"] },
+  ],
 
-Q.addition_write = [
-  {q:'65 + 4 = ?',  answer:69},
-  {q:'82 − 3 = ?',  answer:79},
-  {q:'3 + 8 + 7 + 1 = ?', answer:19},
-  {q:'54 + 30 = ?', answer:84},
-  {q:'51 − 30 = ?', answer:21},
-  {q:'60 − 40 = ?', answer:20},
-  {q:'10 + 49 = ?', answer:59},
-  {q:'45 + 31 = ?', answer:76},
-];
+  mat_addition: [
+    { q:"What is 47 + 36?", a:"83", opts:["83","73","93","80"], hint:"Add ones first: 7+6=13, carry 1" },
+    { q:"What is 58 + 25?", a:"83", opts:["83","73","93","80"] },
+    { q:"What is 64 + 28?", a:"92", opts:["92","82","72","102"] },
+    { q:"What is 35 + 47?", a:"82", opts:["82","72","92","80"] },
+    { q:"What is 19 + 53?", a:"72", opts:["72","62","82","70"] },
+    { q:"What is 76 + 14?", a:"90", opts:["90","80","100","86"] },
+    { q:"What is 45 + 45?", a:"90", opts:["90","80","100","85"] },
+  ],
 
-Q.equal_circle = [
-  {q:'18 + 2 = ?', answer:20, opts:[18,20,22], note:'Which value equals the other side?'},
-  {q:'8 + 7 = ?',  answer:15, opts:[13,15,17], note:''},
-  {q:'25 − 5 = ?', answer:20, opts:[18,20,22], note:''},
-  {q:'15 − 6 = ?', answer:9,  opts:[7,9,11],  note:''},
-  {q:'19 − 4 = ?', answer:15, opts:[13,15,17], note:''},
-  {q:'4 + 6 = ?',  answer:10, opts:[8,10,12],  note:''},
-  {q:'28 − 9 = ?', answer:19, opts:[17,19,21], note:''},
-  {q:'8 + 9 = ?',  answer:17, opts:[15,17,19], note:''},
-];
+  mat_equal: [
+    { q:"Is 3 + 5 = 4 + 4 ?", a:"Yes, equal ✅", opts:["Yes, equal ✅","No, not equal ❌"], hint:"Both equal 8" },
+    { q:"Is 7 + 2 = 10 - 1 ?", a:"Yes, equal ✅", opts:["Yes, equal ✅","No, not equal ❌"], hint:"9 = 9" },
+    { q:"Is 6 + 3 = 8 + 2 ?", a:"No, not equal ❌", opts:["Yes, equal ✅","No, not equal ❌"], hint:"9 ≠ 10" },
+    { q:"Is 5 + 5 = 9 + 1 ?", a:"Yes, equal ✅", opts:["Yes, equal ✅","No, not equal ❌"], hint:"10 = 10" },
+    { q:"Is 4 + 7 = 6 + 4 ?", a:"No, not equal ❌", opts:["Yes, equal ✅","No, not equal ❌"], hint:"11 ≠ 10" },
+    { q:"Is 8 + 0 = 3 + 5 ?", a:"Yes, equal ✅", opts:["Yes, equal ✅","No, not equal ❌"], hint:"8 = 8" },
+  ],
 
-Q.equal_write = [
-  {q:'15 + 2 = ___ − 3  (what result do both equal?)', answer:17},
-  {q:'25 − 7 = 12 + ___', answer:6},
-  {q:'4 + 6 = ___ − 0', answer:10},
-  {q:'13 + 2 = 17 − ___', answer:2},
-  {q:'16 − 9 = 6 + ___', answer:1},
-  {q:'23 − 8 = ___ − 1', answer:16},
-  {q:'14 + 3 = 7 + ___', answer:10},
-  {q:'22 − 4 = 9 + ___', answer:9},
-];
+  mat_tens: [
+    { q:"What is the value of the 3 in 35?", a:"30 (3 tens)", opts:["30 (3 tens)","3 ones","3","300"], hint:"The first digit is the tens place" },
+    { q:"How many tens and ones in 47?", a:"4 tens, 7 ones", opts:["4 tens, 7 ones","7 tens, 4 ones","40 tens, 7","4, 7 tens"], hint:"Tens digit first" },
+    { q:"What number is 6 tens and 3 ones?", a:"63", opts:["63","36","603","360"] },
+    { q:"What number is 2 tens and 8 ones?", a:"28", opts:["28","82","208","280"] },
+    { q:"How many tens in 50?", a:"5", opts:["5","50","0","15"] },
+    { q:"Which has more tens — 74 or 47?", a:"74", opts:["74","47","They are equal"] },
+    { q:"What is 3 tens and 0 ones?", a:"30", opts:["30","3","300","13"] },
+  ],
 
-Q.place_circle = [
-  {q:'What is the value of the TENS digit in 76?', answer:70, opts:[7,70,76]},
-  {q:'What is the value of the ONES digit in 43?', answer:3,  opts:[3,40,43]},
-  {q:'Which number has 6 tens and 0 ones?',        answer:60, opts:[6,60,66]},
-  {q:'Which is the biggest? 15 / 69 / 73 / 48',   answer:73, opts:[69,73,48]},
-  {q:'Which is the smallest? 63 / 65 / 69 / 62',  answer:62, opts:[62,63,65]},
-  {q:'How many tens in 58?',                        answer:5,  opts:[5,8,58]},
-  {q:'What number has 4 tens and 6 ones?',         answer:46, opts:[40,46,64]},
-  {q:'Which is bigger: 74 or 47?',                 answer:74, opts:[47,74,'equal']},
-];
+  mat_tally: [
+    { q:"Each tally mark stands for one count. |||| = how many?", a:"4", opts:["4","5","3","6"] },
+    { q:"A tally group of 5 looks like 4 marks with 1 crossing through. IIII (with cross) = ?", a:"5", opts:["5","4","6","10"] },
+    { q:"How many tally marks for 7?", a:"5 + 2 marks", opts:["5 + 2 marks","7 marks in a row","3 + 4","6 + 1 crossed"], hint:"Group of 5 then 2 more" },
+    { q:"A bar chart bar reaches to 6. A tally for 6 = ?", a:"5 + 1 mark", opts:["5 + 1 mark","6 marks in a row","3 + 3","4 + 2"], hint:"First group up to 5, then extra" },
+    { q:"Which shows 10 in tally marks?", a:"Two groups of 5", opts:["Two groups of 5","Ten single marks","One group of 10","5 + 4 marks"] },
+    { q:"Favourite fruit survey: 8 chose mango, 5 chose apple. How many more chose mango?", a:"3", opts:["3","2","5","13"] },
+  ],
 
-Q.place_write = [
-  {q:'85 > ___  (write any smaller number)',  answer:84, flex:true, hint:'Any number less than 85'},
-  {q:'63 < ___  (write any bigger number)',   answer:64, flex:true, hint:'Any number greater than 63'},
-  {q:'16 < ___',  answer:17, flex:true, hint:'Any number greater than 16'},
-  {q:'74 < ___',  answer:75, flex:true, hint:'Any number greater than 74'},
-  {q:'58 > ___',  answer:57, flex:true, hint:'Any number less than 58'},
-  {q:'73 < ___',  answer:74, flex:true, hint:'Any number greater than 73'},
-  {q:'82 < ___',  answer:83, flex:true, hint:'Any number greater than 82'},
-  {q:'14 > ___',  answer:13, flex:true, hint:'Any number less than 14'},
-];
+  mat_days: [
+    { q:"Which month comes after March?", a:"April", opts:["April","February","May","June"] },
+    { q:"How many days are in a week?", a:"7", opts:["7","5","10","6"] },
+    { q:"Which day comes after Wednesday?", a:"Thursday", opts:["Thursday","Tuesday","Friday","Monday"] },
+    { q:"Which month is the 12th?", a:"December", opts:["December","November","October","January"] },
+    { q:"How many months are in a year?", a:"12", opts:["12","10","7","24"] },
+    { q:"Which month comes before July?", a:"June", opts:["June","August","May","April"] },
+    { q:"What are the weekend days?", a:"Saturday and Sunday", opts:["Saturday and Sunday","Monday and Tuesday","Friday and Saturday","Saturday and Monday"] },
+  ],
 
-Q.tally_circle = [
-  {q:'Tally count: I I I  (3 marks). How many?', answer:3, opts:[2,3,4]},
-  {q:'Tally count: I I I I  (4 marks). How many?', answer:4, opts:[3,4,5]},
-  {q:'Tally count: I I I I I  (5 marks, one group). How many?', answer:5, opts:[4,5,6]},
-  {q:'Tally count: I I I I I  I I  (5 + 2 marks). How many?', answer:7, opts:[6,7,8]},
-  {q:'Pencils: 4 tally marks. Notebooks: 5 tally marks. Which has more?', answer:'Notebooks', opts:['Pencils','Notebooks','Same']},
-  {q:'Yellow: 5, Red: 3, Blue: 4, Green: 7. Which colour has most?', answer:'Green', opts:['Yellow','Blue','Green']},
-  {q:'Yellow: 5, Red: 3, Blue: 4, Green: 7. Which colour has fewest?', answer:'Red', opts:['Red','Blue','Yellow']},
-  {q:'Cars: 6, Aeroplanes: 4, Trains: 2. How many vehicles altogether?', answer:12, opts:[10,12,14]},
-];
+  mat_money: [
+    { q:"If you have 50p and spend 20p, how much is left?", a:"30p", opts:["30p","20p","40p","70p"] },
+    { q:"Which coin is worth more — 50p or 20p?", a:"50p", opts:["50p","20p","They are equal"] },
+    { q:"You have £1 and buy a snack for 65p. Change?", a:"35p", opts:["35p","45p","25p","65p"] },
+    { q:"How many 10p coins make 50p?", a:"5", opts:["5","10","4","6"] },
+    { q:"You have 2 × 20p and 1 × 10p. Total?", a:"50p", opts:["50p","40p","30p","60p"] },
+    { q:"What does '£' stand for?", a:"Pounds", opts:["Pounds","Pence","Price","Payment"] },
+  ],
 
-Q.tally_circle2 = [
-  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. Which colours have the same count?', answer:'Red and orange', opts:['Red and blue','Orange and blue','Red and orange']},
-  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. How many more like red than blue?', answer:2, opts:[1,2,4]},
-  {q:'A bar graph shows: green=7, yellow=9, red=3, blue=1, orange=3. Total altogether?', answer:23, opts:[18,23,30]},
-  {q:'Lin\'s bag: notebooks=5, coloured pencils=8, rubbers=3, books=5, pencils=9. How many types of items?', answer:5, opts:[4,5,6]},
-  {q:'Lin\'s bag: notebooks=5, coloured pencils=8, rubbers=3, books=5, pencils=9. How many fewer books than coloured pencils?', answer:3, opts:[1,3,6]},
-  {q:'Breakfast drinks: milk=7, orange juice=10, lemon juice=4. Which do most children drink?', answer:'Orange juice', opts:['Milk','Orange juice','Lemon juice']},
-  {q:'Breakfast drinks: milk=7, orange juice=10, lemon juice=4. Which do fewest children drink?', answer:'Lemon juice', opts:['Milk','Orange juice','Lemon juice']},
-  {q:'Shapes: triangles=9, squares=5, pentagons=6. How many shapes altogether?', answer:20, opts:[18,20,22]},
-];
+  mat_prob: [
+    { q:"A bag has 5 red and 1 blue ball. What colour are you MOST LIKELY to pick?", a:"Red", opts:["Red","Blue","Green","Yellow"], hint:"More red balls = more likely to pick red" },
+    { q:"If something is impossible, its probability is…", a:"0 (it cannot happen)", opts:["0 (it cannot happen)","1 (certain)","Maybe","Half-half"] },
+    { q:"Which word means it will definitely happen?", a:"Certain", opts:["Certain","Unlikely","Impossible","Maybe"] },
+    { q:"Flipping a fair coin — heads or tails?", a:"Equally likely", opts:["Equally likely","Heads is more likely","Tails is more likely","Impossible"] },
+    { q:"A spinner is split equally into 4 colours. Chance of landing on any one colour?", a:"1 in 4", opts:["1 in 4","1 in 2","4 in 4","0"] },
+    { q:"There are 3 green and 3 yellow cubes in a bag. Picking green is…", a:"Equally likely as yellow", opts:["Equally likely as yellow","Certain","Impossible","More likely than yellow"] },
+  ],
 
-Q.time_circle = [
-  {q:'What day comes after Monday?',   answer:'Tuesday',   opts:['Sunday','Tuesday','Wednesday']},
-  {q:'What day comes before Friday?',  answer:'Thursday',  opts:['Wednesday','Thursday','Saturday']},
-  {q:'What is the 1st month of the year?', answer:'January', opts:['January','February','March']},
-  {q:'What is the 5th month of the year?', answer:'May',     opts:['April','May','June']},
-  {q:'What is the 8th month of the year?', answer:'August',  opts:['July','August','September']},
-  {q:'How many days are in a week?',   answer:7,    opts:[5,7,10]},
-  {q:'How many months are in a year?', answer:12,   opts:[10,12,14]},
-  {q:'Today is Monday. Tomorrow will be?', answer:'Tuesday', opts:['Sunday','Tuesday','Wednesday']},
-];
+  mat_picto: [
+    { q:"In a pictogram, each 🍎 = 2 children. 4 apples are shown. How many children?", a:"8", opts:["8","4","2","6"], hint:"4 × 2 = ?" },
+    { q:"Each 🌟 = 5 points. 3 stars shown. Total points?", a:"15", opts:["15","3","5","10"] },
+    { q:"Each 🐟 = 3 fish. 2 symbols shown. Total fish?", a:"6", opts:["6","2","3","9"] },
+    { q:"A pictogram key says each ☀️ = 10. You see 5 suns. Total?", a:"50", opts:["50","5","15","100"] },
+    { q:"What does the KEY in a pictogram tell you?", a:"What each picture is worth", opts:["What each picture is worth","The title of the chart","The colours used","The name of the student"] },
+  ],
 
-Q.time_write = [
-  {q:'What month comes after March?',     answer:'april',     display:'April'},
-  {q:'What month comes after April?',     answer:'may',       display:'May'},
-  {q:'What month comes before December?', answer:'november',  display:'November'},
-  {q:'What day comes after Wednesday?',   answer:'thursday',  display:'Thursday'},
-  {q:'What day comes after Saturday?',    answer:'sunday',    display:'Sunday'},
-  {q:'What is the 3rd month of the year?',answer:'march',     display:'March'},
-  {q:'What is the 12th month of the year?',answer:'december', display:'December'},
-  {q:'What month comes before June?',     answer:'may',       display:'May'},
-];
+  // ──────── SCIENCE ────────
 
-Q.money_circle = [
-  {q:'What is $50?',  answer:'50 dollars', opts:['50 cents','50 dollars','5 dollars']},
-  {q:'What is 25c?',  answer:'25 cents',   opts:['25 dollars','25 cents','2 dollars']},
-  {q:'What is $1?',   answer:'1 dollar',   opts:['1 cent','10 dollars','1 dollar']},
-  {q:'What is 50c?',  answer:'50 cents',   opts:['50 dollars','50 cents','5 cents']},
-  {q:'What is $20?',  answer:'20 dollars', opts:['20 cents','2 dollars','20 dollars']},
-  {q:'$1 + 10c = ?',  answer:'$1.10',      opts:['$1.01','$1.10','$10.10']},
-  {q:'$5 + 50c = ?',  answer:'$5.50',      opts:['$5.05','$5.50','$55.00']},
-  {q:'$20 + 25c = ?', answer:'$20.25',     opts:['$20.25','$20.52','$22.50']},
-];
+  sci_forces: [
+    { q:"What happens when you SQUASH something?", a:"It gets pushed together and becomes smaller", opts:["It gets pushed together and becomes smaller","It gets longer","It breaks into pieces","It gets hotter"] },
+    { q:"When you STRETCH elastic, what happens?", a:"It gets longer", opts:["It gets longer","It gets shorter","It breaks","It gets heavier"] },
+    { q:"BENDING means:", a:"Curving or folding a material", opts:["Curving or folding a material","Pulling it apart","Heating it up","Making it smaller"] },
+    { q:"Which material is ELASTIC?", a:"Rubber band", opts:["Rubber band","Metal rod","Glass","Wood"] },
+    { q:"Elastic means:", a:"It can stretch and return to its original shape", opts:["It can stretch and return to its original shape","It melts easily","It is very hard","It cannot be changed"] },
+    { q:"Which is an example of SQUASHING?", a:"Pressing a lump of clay", opts:["Pressing a lump of clay","Pulling a spring","Heating water","Cooling ice"] },
+    { q:"Which is an example of STRETCHING?", a:"Pulling a rubber band", opts:["Pulling a rubber band","Pushing a box","Bending a straw","Squeezing play-doh"] },
+  ],
 
-Q.money_write = [
-  {q:'$50 and 10 cents = $___',   answer:50.10, display:'50.10'},
-  {q:'$5 and 50 cents = $___',    answer:5.50,  display:'5.50'},
-  {q:'$20 and 25 cents = $___',   answer:20.25, display:'20.25'},
-  {q:'$1 and 10 cents = $___',    answer:1.10,  display:'1.10'},
-  {q:'How many cents in $1?',     answer:100,   display:'100'},
-  {q:'$3 and 5 cents = $___',     answer:3.05,  display:'3.05'},
-  {q:'$0.40 = ___ cents',         answer:40,    display:'40'},
-  {q:'$5.60 = $5 and ___ cents',  answer:60,    display:'60'},
-];
+  sci_heat: [
+    { q:"What happens to water when you HEAT it to 100°C?", a:"It turns into steam (evaporates)", opts:["It turns into steam (evaporates)","It turns to ice","It gets heavier","It disappears forever"] },
+    { q:"What happens when you COOL water to 0°C?", a:"It freezes into ice", opts:["It freezes into ice","It turns into steam","It boils","It disappears"] },
+    { q:"Which changes when you heat chocolate?", a:"It melts from solid to liquid", opts:["It melts from solid to liquid","It gets harder","It turns into water","It turns into gas"] },
+    { q:"COOLING means:", a:"Removing heat from something", opts:["Removing heat from something","Adding heat","Stretching","Squashing"] },
+    { q:"What is an example of HEATING in cooking?", a:"Frying an egg", opts:["Frying an egg","Putting ice cream in a freezer","Drinking cold water","Refrigerating juice"] },
+  ],
 
-Q.chance_circle = [
-  {q:'A spinner is mostly RED with a tiny bit of BLUE. What is the chance of spinning RED?', answer:'Good chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'A spinner is half RED and half BLUE. What is the chance of spinning RED?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'A spinner is mostly BLUE with a tiny bit of RED. What is the chance of spinning RED?', answer:'Small chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'Blue tally: |||| |||  Purple tally: |||| |||| |||| |. Which colour has a GOOD chance of being spun?', answer:'Purple', opts:['Blue','Purple','Neither']},
-  {q:'A bag has 1 red ball and 9 blue balls. Chance of picking red?', answer:'Small chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'A bag has 5 red balls and 5 blue balls. Chance of picking red?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'Flipping a coin: heads or tails?', answer:'Equal chance', opts:['Small chance','Equal chance','Good chance']},
-  {q:'A box has 8 apples and 2 oranges. Chance of picking an apple?', answer:'Good chance', opts:['Small chance','Equal chance','Good chance']},
-];
+  sci_dissolve: [
+    { q:"Sugar in water — what happens?", a:"It dissolves and disappears into the water", opts:["It dissolves and disappears into the water","It sinks to the bottom and stays solid","It makes the water freeze","It turns into gas"] },
+    { q:"Sand in water — what happens?", a:"It does NOT dissolve — it sinks", opts:["It does NOT dissolve — it sinks","It dissolves completely","It makes the water sweet","It evaporates"] },
+    { q:"Does salt dissolve in water?", a:"Yes", opts:["Yes","No","Only in hot water","Only in cold water"] },
+    { q:"What word means a substance breaks up and mixes completely into liquid?", a:"Dissolves", opts:["Dissolves","Evaporates","Freezes","Melts"] },
+    { q:"Which substance does NOT dissolve in water?", a:"Stones/rocks", opts:["Stones/rocks","Sugar","Salt","Flour"] },
+    { q:"You stir sugar into warm water. The mixture is called…", a:"A solution", opts:["A solution","A mixture of solids","Juice","A solid"] },
+  ],
 
-Q.pictogram_circle = [
-  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many like rainy weather?', answer:7, opts:[5,7,9]},
-  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many more like snowy than cloudy?', answer:1, opts:[1,3,4]},
-  {q:'Favourite weather pictogram:\nSunny:9, Cloudy:4, Rainy:7, Snowy:5\nHow many answered altogether?', answer:25, opts:[20,25,31]},
-  {q:'Favourite snack pictogram:\nApple:8, Chocolate:5, Sandwich:2, Biscuit:5, Yogurt:6\nWhich snack do fewest students like best?', answer:'Sandwich', opts:['Chocolate','Sandwich','Biscuit']},
-  {q:'Favourite snack pictogram:\nApple:8, Chocolate:5, Sandwich:2, Biscuit:5, Yogurt:6\nWhich snacks have the same number of students?', answer:'Chocolate and Biscuit', opts:['Apple and Yogurt','Chocolate and Biscuit','Sandwich and Biscuit']},
-  {q:'Fruits pictogram:\nBanana:10, Apple:9, Orange:7, Mango:5\nWhich fruit appears most?', answer:'Banana', opts:['Apple','Banana','Orange']},
-  {q:'Fruits pictogram:\nBanana:10, Apple:9, Orange:7, Mango:5\nHow many more bananas than mangoes?', answer:5, opts:[3,5,7]},
-  {q:'Kate\'s flowers:\nRed:5, Yellow:8, Orange:4, Pink:3, Purple:7\nWhich colour does she have most of?', answer:'Yellow', opts:['Red','Yellow','Purple']},
-];
+  sci_rocks: [
+    { q:"Which type of rock forms from cooled lava?", a:"Igneous", opts:["Igneous","Sedimentary","Metamorphic","Fossil"] },
+    { q:"Sedimentary rocks form from:", a:"Layers of sand and mud pressed over time", opts:["Layers of sand and mud pressed over time","Cooled lava","Rocks squashed underground by heat","Animal bones only"] },
+    { q:"Which rock is used to build many old buildings?", a:"Limestone", opts:["Limestone","Chalk","Granite","Slate"] },
+    { q:"What do rocks contain that can give us information about ancient life?", a:"Fossils", opts:["Fossils","Water","Seeds","Metal"] },
+    { q:"Granite is a type of…", a:"Igneous rock", opts:["Igneous rock","Sedimentary rock","Metamorphic rock","Fossil"] },
+    { q:"Which rock is used for roofing tiles?", a:"Slate", opts:["Slate","Limestone","Granite","Marble"] },
+  ],
 
-// ── STATE ────────────────────────────────────────────────────────────────────
-let curSubject='', curMode='', curIdx=0, score=0, correct=0, answered=false, questions=[];
+  sci_manmade: [
+    { q:"Which is a NATURAL material?", a:"Wood", opts:["Wood","Plastic","Glass","Steel"] },
+    { q:"Which is a MAN-MADE material?", a:"Plastic", opts:["Plastic","Cotton","Rock","Water"] },
+    { q:"Wool comes from:", a:"Sheep (natural)", opts:["Sheep (natural)","A factory","Plastic bags","Metal machines"] },
+    { q:"Which of these is NOT natural?", a:"Nylon fabric", opts:["Nylon fabric","Leather","Wood","Stone"] },
+    { q:"Bricks are…", a:"Man-made (from clay, shaped and baked)", opts:["Man-made (from clay, shaped and baked)","Found in nature as bricks","Grown on trees","A type of rock"] },
+    { q:"Glass is made from:", a:"Sand (melted at high temperature)", opts:["Sand (melted at high temperature)","Plastic","Rocks","Wood pulp"] },
+  ],
 
-// ── BUILD HOME ───────────────────────────────────────────────────────────────
-const grid = document.getElementById('subject-grid');
-SUBJECTS.forEach(s => {
-  const el = document.createElement('div');
-  el.className = `subject-card ${s.color}`;
-  el.innerHTML = `<div class="s-icon">${s.icon}</div><div class="s-title">${s.title}</div><div class="s-desc">${s.desc}</div>`;
-  el.onclick = () => selectSubject(s.id);
-  grid.appendChild(el);
-});
+  // ──────── HISTÓRIA ────────
 
-// ── NAV ──────────────────────────────────────────────────────────────────────
-function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function goHome(){ show('home'); }
+  his_fontes: [
+    { q:"O que são fontes históricas?", a:"Objetos, documentos ou registros que nos ajudam a conhecer o passado", opts:["Objetos, documentos ou registros que nos ajudam a conhecer o passado","Livros de ficção","Fotografias do futuro","Mapas do espaço"] },
+    { q:"A arqueologia estuda:", a:"Objetos e vestígios deixados por pessoas no passado", opts:["Objetos e vestígios deixados por pessoas no passado","Animais extintos","O clima atual","Mapas do universo"] },
+    { q:"Um objeto antigo encontrado enterrado é chamado de:", a:"Vestígio arqueológico", opts:["Vestígio arqueológico","Fóssil de animal","Produto industrial","Material reciclável"] },
+    { q:"Qual é um exemplo de fonte histórica escrita?", a:"Carta antiga", opts:["Carta antiga","Pedra na rua","Fotografia atual","Embalagem de supermercado"] },
+    { q:"Fotografias antigas são importantes porque:", a:"Mostram como as pessoas e lugares eram no passado", opts:["Mostram como as pessoas e lugares eram no passado","São mais bonitas","São mais coloridas","São mais modernas"] },
+    { q:"Museus guardam objetos históricos para:", a:"Preservar a memória do passado", opts:["Preservar a memória do passado","Vender para colecionadores","Jogar fora depois","Usar no cotidiano"] },
+  ],
 
-function selectSubject(id){
-  curSubject = id;
-  const s = SUBJECTS.find(x=>x.id===id);
-  document.getElementById('ms-title').textContent = s.icon + ' ' + s.title;
-  const mc = document.getElementById('mode-cards');
-  mc.innerHTML = '';
-  const modes = MODES[id];
-  modes.forEach(m => {
-    const el = document.createElement('div');
-    const colorVar = s.color.replace('c','');
-    const colors = ['sky','sun','grass','berry','purple','teal','orange','pink','indigo'];
-    const col = colors[parseInt(s.color.substring(1))] || 'sky';
-    el.className = 'mode-card';
-    el.style.borderColor = `var(--${col})`;
-    el.innerHTML = `<div class="mode-icon">${m.icon}</div><div class="mode-info"><h3>${m.title}</h3><p>${m.desc}</p></div>`;
-    el.onclick = () => startGame(id, m.id, m.title);
-    mc.appendChild(el);
+  his_bairros: [
+    { q:"As ruas de um bairro são nomeadas principalmente por:", a:"Decisão das prefeituras", opts:["Decisão das prefeituras","Votação dos moradores","Sorteio","Ordem alfabética aleatória"] },
+    { q:"Muitos nomes de ruas e bairros no Brasil têm origem:", a:"Indígena ou africana", opts:["Indígena ou africana","Somente europeia","Somente inglesa","Americana"] },
+    { q:"O que é um bairro?", a:"Uma divisão de um município com características próprias", opts:["Uma divisão de um município com características próprias","Uma cidade inteira","Um país","Um estado"] },
+    { q:"Os bairros fazem parte de:", a:"Um município (cidade)", opts:["Um município (cidade)","Um país diretamente","Uma rua","Um continente"] },
+    { q:"A história de um bairro pode ser conhecida por:", a:"Documentos, fotos antigas e relatos de moradores", opts:["Documentos, fotos antigas e relatos de moradores","Apenas pela internet","Somente por livros novos","Apenas por mapas"] },
+  ],
+
+  his_profissoes: [
+    { q:"Qual profissão NÃO existia há 100 anos?", a:"Programador de computadores", opts:["Programador de computadores","Ferreiro","Agricultor","Carpinteiro"] },
+    { q:"Profissões que deixaram de existir são chamadas de:", a:"Profissões extintas", opts:["Profissões extintas","Profissões modernas","Profissões futuras","Profissões novas"] },
+    { q:"Qual profissão surgiu mais recentemente?", a:"Motorista de aplicativo", opts:["Motorista de aplicativo","Padeiro","Médico","Professor"] },
+    { q:"O mascate era um vendedor que:", a:"Vendia produtos de porta em porta", opts:["Vendia produtos de porta em porta","Trabalhava em fábricas","Era agricultor","Era professor"] },
+    { q:"Hoje a IA (Inteligência Artificial) pode:", a:"Realizar tarefas antes feitas somente por humanos", opts:["Realizar tarefas antes feitas somente por humanos","Sentir emoções","Ter família","Ser dona de uma empresa"] },
+    { q:"Uma profissão do passado que ainda existe hoje é:", a:"Médico", opts:["Médico","Fotógrafo de daguerreótipo","Operador de telégrafo","Acendedor de lampiões"] },
+  ],
+
+  his_trabalho: [
+    { q:"A principal atividade econômica da zona rural é:", a:"Agricultura e pecuária", opts:["Agricultura e pecuária","Comércio de roupas","Indústria de eletrônicos","Serviços bancários"] },
+    { q:"Moradores do campo geralmente têm contato maior com:", a:"A natureza e animais", opts:["A natureza e animais","Shoppings e cinemas","Metrô e ônibus","Arranha-céus"] },
+    { q:"A pecuária é:", a:"A criação de animais no campo", opts:["A criação de animais no campo","O cultivo de plantas","A venda de produtos","A construção de casas"] },
+    { q:"A piscicultura é:", a:"O cultivo de peixes", opts:["O cultivo de peixes","A pesca em alto mar","A criação de aves","O plantio de arroz"] },
+  ],
+
+  his_lei: [
+    { q:"A CLT (Consolidação das Leis do Trabalho) protege:", a:"Os direitos dos trabalhadores", opts:["Os direitos dos trabalhadores","Os patrões","As máquinas","Os produtos importados"] },
+    { q:"Qual direito trabalhista garante descanso ao trabalhador?", a:"Férias anuais remuneradas", opts:["Férias anuais remuneradas","Trabalhar 7 dias por semana","Não ter hora de entrada","Trabalhar sem contrato"] },
+    { q:"A IA no mercado de trabalho pode:", a:"Automatizar tarefas repetitivas", opts:["Automatizar tarefas repetitivas","Substituir todos os trabalhadores imediatamente","Acabar com todas as profissões","Fazer apenas trabalhos manuais"] },
+    { q:"Uma lei trabalhista importante garante:", a:"Salário mínimo para os trabalhadores", opts:["Salário mínimo para os trabalhadores","Trabalho gratuito","Que todos trabalhem 12 horas","Proibição de descanso"] },
+  ],
+
+  // ──────── GEOGRAFIA ────────
+
+  geo_bairro: [
+    { q:"O que é um bairro?", a:"Uma divisão de um município", opts:["Uma divisão de um município","Uma cidade inteira","Um país","Uma rua isolada"] },
+    { q:"Um município é formado por:", a:"Vários bairros", opts:["Vários bairros","Uma única rua","Apenas uma praça","Somente um bairro"] },
+    { q:"Bairro → Município → Estado → Brasil. O bairro é o nível:", a:"Menor", opts:["Menor","Maior","Igual ao estado","Igual ao país"] },
+    { q:"Quem é responsável por cuidar dos bairros de uma cidade?", a:"A Prefeitura", opts:["A Prefeitura","O governador do estado","O presidente","Os moradores sozinhos"] },
+    { q:"Qual dos seguintes é um elemento do bairro?", a:"Praça", opts:["Praça","País","Continente","Estado"] },
+    { q:"Em qual ordem crescente está correto?", a:"Bairro < Município < Estado < País", opts:["Bairro < Município < Estado < País","País < Estado < Bairro","Município < Bairro < Estado","Estado < País < Bairro"] },
+  ],
+
+  geo_tipos: [
+    { q:"Um bairro com muitas casas e apartamentos é chamado de:", a:"Residencial", opts:["Residencial","Comercial","Industrial","Misto"] },
+    { q:"Um bairro com muitas lojas e comércios é chamado de:", a:"Comercial", opts:["Comercial","Residencial","Industrial","Rural"] },
+    { q:"Um bairro com muitas fábricas é chamado de:", a:"Industrial", opts:["Industrial","Comercial","Residencial","Agrícola"] },
+    { q:"Um bairro que tem casas, lojas e fábricas juntas é:", a:"Misto", opts:["Misto","Rural","Comercial","Industrial"] },
+    { q:"Um bairro residencial tem principalmente:", a:"Moradias (casas e prédios)", opts:["Moradias (casas e prédios)","Somente fábricas","Apenas lojas","Plantações"] },
+    { q:"O bairro da Alice (Água Branca) tem residências e comércios. É um bairro:", a:"Misto", opts:["Misto","Somente industrial","Somente residencial","Rural"] },
+  ],
+
+  geo_zonas: [
+    { q:"A zona urbana é também chamada de:", a:"Cidade", opts:["Cidade","Campo","Floresta","Fazenda"] },
+    { q:"A zona rural é também chamada de:", a:"Campo", opts:["Campo","Centro","Metrópole","Subúrbio"] },
+    { q:"Qual característica é típica da ZONA URBANA?", a:"Muitos prédios, ruas, comércios e serviços", opts:["Muitos prédios, ruas, comércios e serviços","Plantações e criação de animais","Florestas nativas","Ausência de pessoas"] },
+    { q:"Qual atividade é típica da ZONA RURAL?", a:"Agricultura e pecuária", opts:["Agricultura e pecuária","Metrô e ônibus","Grandes shoppings","Indústria eletrônica"] },
+    { q:"Município litorâneo fica:", a:"Perto do litoral/mar", opts:["Perto do litoral/mar","No alto de uma montanha","No sertão","No interior longe do mar"] },
+    { q:"Município do interior fica:", a:"Longe do litoral e das grandes cidades", opts:["Longe do litoral e das grandes cidades","Sempre perto do mar","Na capital","Em outro país"] },
+    { q:"São Paulo é uma zona:", a:"Urbana", opts:["Urbana","Rural","Florestal","Deserta"] },
+  ],
+
+  geo_vizinhos: [
+    { q:"Vizinhos são:", a:"Pessoas que moram perto umas das outras", opts:["Pessoas que moram perto umas das outras","Amigos de escola","Familiares","Colegas de trabalho"] },
+    { q:"Vizinhança é:", a:"O conjunto de locais próximos de onde moramos", opts:["O conjunto de locais próximos de onde moramos","Uma cidade inteira","Um parque","Uma escola"] },
+    { q:"Para ter boa convivência no bairro é preciso:", a:"Respeitar as pessoas e as regras", opts:["Respeitar as pessoas e as regras","Fazer barulho a qualquer hora","Jogar lixo nas ruas","Ignorar os vizinhos"] },
+    { q:"Imigrantes são pessoas que:", a:"Vieram de outros municípios, estados ou países", opts:["Vieram de outros municípios, estados ou países","Nasceram no mesmo bairro","São familiares","São professores"] },
+    { q:"Uma boa atitude na vizinhança é:", a:"Cumprimentar os vizinhos", opts:["Cumprimentar os vizinhos","Deixar o som alto à noite","Jogar lixo em terrenos vazios","Ignorar as regras de trânsito"] },
+  ],
+
+  geo_periodo: [
+    { q:"O período da manhã vai de:", a:"6h às 11h59", opts:["6h às 11h59","0h às 5h","12h às 17h","18h às 23h"], hint:"Manhã: 6h a quase meio-dia" },
+    { q:"O período da tarde vai de:", a:"12h às 17h59", opts:["12h às 17h59","6h às 11h","18h às 23h","0h às 5h"] },
+    { q:"O período da noite vai de:", a:"18h até 5h59", opts:["18h até 5h59","12h às 17h","6h às 11h","20h às 23h"] },
+    { q:"A madrugada acontece entre:", a:"0h e 5h59", opts:["0h e 5h59","12h e 17h","6h e 11h","18h e 23h"] },
+    { q:"Uma criança que vai à escola às 7h está no período:", a:"Manhã", opts:["Manhã","Tarde","Noite","Madrugada"] },
+    { q:"Uma atividade das 14h acontece no período:", a:"Tarde", opts:["Tarde","Manhã","Noite","Madrugada"] },
+    { q:"Diurno significa relacionado a:", a:"O dia", opts:["O dia","A noite","A manhã apenas","A tarde apenas"] },
+  ],
+
+  geo_profgeo: [
+    { q:"Paula é médica e trabalha em um hospital que nunca fecha. Ela trabalha:", a:"Em diferentes períodos (dia e noite)", opts:["Em diferentes períodos (dia e noite)","Somente de manhã","Somente à noite","Somente nos fins de semana"] },
+    { q:"José é motorista de ônibus, das 5h às 15h. Ele trabalha no período:", a:"Diurno (madrugada e manhã)", opts:["Diurno (madrugada e manhã)","Noturno","Apenas à tarde","Fins de semana"] },
+    { q:"Luciano é professor de turma noturna. Ele trabalha:", a:"À noite", opts:["À noite","De manhã","À tarde","Em qualquer período"] },
+    { q:"Mariana é bombeira e trabalha de dia e de noite. Seu trabalho é:", a:"Nos dois períodos", opts:["Nos dois períodos","Somente diurno","Somente noturno","Apenas no fim de semana"] },
+    { q:"Um padeiro que trabalha das 4h às 12h trabalha no período:", a:"Madrugada e manhã", opts:["Madrugada e manhã","Tarde e noite","Somente à tarde","Somente à noite"] },
+    { q:"Qual profissional trabalha necessariamente à noite?", a:"Segurança noturno", opts:["Segurança noturno","Professor diurno","Carteiro","Comerciante de loja"] },
+  ],
+
+  geo_estab: [
+    { q:"Qual estabelecimento fica aberto 24 horas?", a:"Hospital", opts:["Hospital","Escola","Loja de brinquedos","Correio"] },
+    { q:"O horário de funcionamento de uma loja pode variar conforme:", a:"O dia da semana", opts:["O dia da semana","A cor da loja","O tamanho","O nome do dono"] },
+    { q:"Uma farmácia 24h fica aberta:", a:"O dia todo, todos os dias", opts:["O dia todo, todos os dias","Só de manhã","Só à tarde","Só nos fins de semana"] },
+    { q:"A prefeitura funciona principalmente:", a:"Durante o dia, em dias úteis", opts:["Durante o dia, em dias úteis","24 horas por dia","Somente aos domingos","À noite"] },
+    { q:"Corpo de bombeiros funciona:", a:"24 horas (emergências a qualquer hora)", opts:["24 horas (emergências a qualquer hora)","Só de manhã","Só à tarde","Só em dias úteis"] },
+    { q:"Escola funciona:", a:"Durante o dia, em dias úteis", opts:["Durante o dia, em dias úteis","24 horas","Somente à noite","Todo final de semana"] },
+  ],
+
+  geo_campo: [
+    { q:"Agricultura é:", a:"O cultivo de plantas e vegetais", opts:["O cultivo de plantas e vegetais","A criação de animais","A extração de minerais","A construção de casas"] },
+    { q:"Pecuária é:", a:"A criação de vacas, porcos, ovelhas e outros animais", opts:["A criação de vacas, porcos, ovelhas e outros animais","O cultivo de frutas","A pesca","A extração de petróleo"] },
+    { q:"Piscicultura é:", a:"O cultivo de peixes", opts:["O cultivo de peixes","A caça de peixes selvagens","O plantio de arroz","A criação de aves"] },
+    { q:"O papel é produzido a partir de:", a:"Elementos das árvores", opts:["Elementos das árvores","Pedras","Areia","Metais"] },
+    { q:"Qual das atividades é mais difícil de fazer à noite?", a:"Agricultura (precisa da luz do sol)", opts:["Agricultura (precisa da luz do sol)","Criar vacas","Pescar com lâmpada","Guardar animais no estábulo"] },
+    { q:"A maioria das atividades do campo é feita no período diurno porque:", a:"As plantas precisam da luz solar", opts:["As plantas precisam da luz solar","É mais barato","Os animais dormem de dia","Não há outra razão"] },
+  ],
+
+  geo_extrat: [
+    { q:"Extrativismo é:", a:"A extração de elementos da natureza", opts:["A extração de elementos da natureza","O cultivo de plantas","A criação de animais","A fabricação de produtos"] },
+    { q:"Extrativismo VEGETAL é:", a:"Retirar vegetais que não foram cultivados pelo ser humano", opts:["Retirar vegetais que não foram cultivados pelo ser humano","Plantar árvores","Criar animais","Extrair metais"] },
+    { q:"Extrativismo ANIMAL é:", a:"Retirar animais da natureza (como pescar)", opts:["Retirar animais da natureza (como pescar)","Criar vacas em fazenda","Plantar frutas","Extrair sal"] },
+    { q:"Extrativismo MINERAL é:", a:"Extrair rochas, areia, ouro e minerais da terra", opts:["Extrair rochas, areia, ouro e minerais da terra","Colher frutas da floresta","Pescar peixes","Cortar madeira"] },
+    { q:"A extração de cocos de uma palmeira é extrativismo:", a:"Vegetal", opts:["Vegetal","Animal","Mineral","Nenhum"] },
+    { q:"A extração de sal do mar é extrativismo:", a:"Mineral", opts:["Mineral","Vegetal","Animal","Industrial"] },
+    { q:"A pesca em rio é extrativismo:", a:"Animal", opts:["Animal","Vegetal","Mineral","Agrícola"] },
+  ],
+
+  geo_repres: [
+    { q:"Uma fotografia tirada de cima para baixo mostra uma visão:", a:"Vertical", opts:["Vertical","Frontal","Oblíqua","Lateral"] },
+    { q:"Uma foto tirada de frente mostra uma visão:", a:"Frontal", opts:["Frontal","Vertical","Oblíqua","Aérea"] },
+    { q:"Uma visão OBLÍQUA é:", a:"Vista de um ângulo diagonal (nem de frente, nem de cima)", opts:["Vista de um ângulo diagonal (nem de frente, nem de cima)","Vista de frente","Vista de cima","Vista de baixo"] },
+    { q:"Uma maquete é:", a:"Um modelo menor do espaço real", opts:["Um modelo menor do espaço real","Uma fotografia","Um mapa plano","Um desenho em papel"] },
+    { q:"Uma PLANTA BAIXA mostra o espaço visto:", a:"De cima (visão vertical)", opts:["De cima (visão vertical)","De frente","De lado","Em perspectiva diagonal"] },
+    { q:"Satélites produzem imagens da superfície da Terra para criar:", a:"Mapas", opts:["Mapas","Maquetes","Pinturas","Desenhos à mão"] },
+    { q:"Qual representação mostra o espaço com mais detalhes de textura e cor real?", a:"Fotografia", opts:["Fotografia","Mapa","Planta baixa","Maquete em papel"] },
+  ],
+};
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+
+let state = {
+  disc: null,
+  topic: null,
+  mode: null,
+  questions: [],
+  current: 0,
+  score: 0,
+  answered: false,
+  errors: JSON.parse(localStorage.getItem('alice_errors') || '[]'),
+};
+
+let lastDisc = null;
+
+// ════════════════════════════════════════════
+//  NAVIGATION
+// ════════════════════════════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // nav highlight
+  document.getElementById('bnHome').classList.toggle('active', id !== 'screenErrors');
+  document.getElementById('bnErrors').classList.toggle('active', id === 'screenErrors');
+  window.scrollTo(0,0);
+}
+
+function showMainMenu() {
+  showScreen('screenHome');
+}
+
+function showTopics(disc) {
+  state.disc = disc;
+  lastDisc = disc;
+  const d = DISCIPLINES[disc];
+  document.getElementById('topicsTitle').textContent = d.name;
+  const list = document.getElementById('topicList');
+  list.innerHTML = '';
+  d.topics.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'topic-btn';
+    btn.innerHTML = `<span class="t-emoji">${t.emoji}</span><div><div>${t.name}</div><div class="t-sub">${t.modes.length} modo(s) disponível</div></div>`;
+    btn.onclick = () => showModes(t);
+    list.appendChild(btn);
   });
-  show('module-select');
+  showScreen('screenTopics');
 }
 
-function startGame(subject, mode, title){
-  curSubject=subject; curMode=mode; curIdx=0; score=0; correct=0; answered=false;
-  document.getElementById('game-title').textContent = title;
-  document.getElementById('score-display').textContent = '0';
-
-  // pick question set
-  const key = subject + '_' + mode;
-  const raw = Q[key];
-  if(!raw){ alert('Coming soon!'); return; }
-  questions = shuffle([...raw]);
-  show('game');
-  renderQ();
-}
-
-// ── RENDER ────────────────────────────────────────────────────────────────────
-function renderQ(){
-  answered = false;
-  const q = questions[curIdx];
-  const total = questions.length;
-  document.getElementById('progress-fill').style.width = (curIdx/total*100)+'%';
-  document.getElementById('progress-label').textContent = `Question ${curIdx+1} of ${total}`;
-  document.getElementById('score-display').textContent = score;
-  const area = document.getElementById('question-area');
-  area.innerHTML = '';
-
-  const key = curSubject + '_' + curMode;
-  if(key==='arrays_match') renderArrayMatch(area,q);
-  else if(key==='arrays_circle') renderArrayCircle(area,q);
-  else if(key==='arrays_write') renderArrayWrite(area,q);
-  else if(key.endsWith('_circle') || key.endsWith('_circle2')) renderMCQ(area,q);
-  else if(key.endsWith('_write')) renderWrite(area,q);
-}
-
-// ── ARRAY MATCH ───────────────────────────────────────────────────────────────
-function renderArrayMatch(area,q){
-  const all = Q.arrays_match.map(x=>x.label);
-  const wrongs = shuffle(all.filter(l=>l!==q.label)).slice(0,3);
-  const opts = shuffle([q.label,...wrongs]);
-  area.innerHTML=`
-    <div class="q-card">
-      <div class="q-label">Match It!</div>
-      <div class="q-text">What is this array?</div>
-      <div class="q-sub">Count the rows and columns 👇</div>
-      <div style="margin-top:14px">${buildArray(q.rows,q.cols,q.color)}</div>
-    </div>
-    <div class="options-grid" id="opts"></div>
-    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
-  const g=document.getElementById('opts');
-  const L=['A','B','C','D'];
-  opts.forEach((label,i)=>{
-    const b=document.createElement('button');
-    b.className='opt-btn'; b.dataset.label=label;
-    b.innerHTML=`<div class="opt-dot">${L[i]}</div><span>${label}</span>`;
-    b.onclick=()=>checkMatch(b,label===q.label,q.label);
-    g.appendChild(b);
+function showModes(topic) {
+  state.topic = topic;
+  document.getElementById('modeTitle').textContent = topic.name;
+  document.getElementById('modeBack').onclick = () => showTopics(state.disc);
+  const grid = document.getElementById('modeGrid');
+  grid.innerHTML = '';
+  topic.modes.forEach(m => {
+    const info = MODES[m];
+    const btn = document.createElement('button');
+    btn.className = 'mode-btn';
+    btn.innerHTML = `<span class="m-emoji">${info.emoji}</span><div><div>${info.name}</div><div class="m-desc">${info.desc}</div></div>`;
+    btn.onclick = () => startQuiz(m);
+    grid.appendChild(btn);
   });
-}
-function checkMatch(btn,ok,correctLabel){
-  if(answered)return; answered=true;
-  document.querySelectorAll('#opts .opt-btn').forEach(b=>{ if(b.dataset.label===correctLabel){ b.classList.add('correct'); b.querySelector('.opt-dot').textContent='✓'; }});
-  if(ok){score+=10;correct++;toast('✅ Correct! +10',false);}
-  else{btn.classList.add('wrong');btn.querySelector('.opt-dot').textContent='✗';toast('❌ Not quite!',true);}
-  updateScore(); showNext();
+  showScreen('screenMode');
 }
 
-// ── ARRAY CIRCLE ──────────────────────────────────────────────────────────────
-function renderArrayCircle(area,q){
-  const L=['A','B','C'];
-  area.innerHTML=`
-    <div class="q-card">
-      <div class="q-label">Pick the Right Array</div>
-      <div class="q-text" style="font-size:26px">${q.mult}</div>
-      <div class="q-sub">Which array shows this multiplication?</div>
-    </div>
-    <div class="options-grid" id="opts"></div>
-    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
-  const g=document.getElementById('opts');
-  q.opts.forEach((opt,i)=>{
-    const b=document.createElement('button');
-    b.className='opt-btn'; b.dataset.idx=i;
-    b.innerHTML=`<div class="opt-dot">${L[i]}</div><div><div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:5px">${opt.r} rows × ${opt.c} cols</div>${buildMiniArray(opt.r,opt.c,q.color)}</div>`;
-    b.onclick=()=>checkArrayCircle(i,q.answer);
-    g.appendChild(b);
+// ════════════════════════════════════════════
+//  QUIZ ENGINE
+// ════════════════════════════════════════════
+
+function startQuiz(mode) {
+  state.mode = mode;
+  const key = `${state.disc}_${state.topic.id}`;
+  let bank = QUESTIONS[key] || [];
+  // shuffle
+  bank = bank.slice().sort(() => Math.random() - 0.5);
+  state.questions = bank.slice(0, Math.min(8, bank.length));
+  state.current = 0;
+  state.score = 0;
+  document.getElementById('quizTitle').textContent = state.topic.name;
+  showScreen('screenQuiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = state.questions[state.current];
+  const total = state.questions.length;
+  state.answered = false;
+
+  // progress
+  document.getElementById('progressBar').style.width = `${(state.current/total)*100}%`;
+  document.getElementById('questionNum').textContent = `Questão ${state.current+1} de ${total}`;
+  document.getElementById('questionText').textContent = q.q;
+  document.getElementById('questionHint').textContent = q.hint ? `💡 ${q.hint}` : '';
+
+  // options
+  const opts = document.getElementById('optionsList');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  // shuffle options
+  const shuffled = (q.opts || []).slice().sort(() => Math.random() - 0.5);
+  // make sure answer is in there
+  if (!shuffled.includes(q.a)) shuffled[0] = q.a;
+
+  shuffled.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => selectAnswer(btn, opt, q);
+    opts.appendChild(btn);
   });
-}
-function checkArrayCircle(chosen,correct){
-  if(answered)return; answered=true;
-  const btns=document.querySelectorAll('#opts .opt-btn');
-  btns[correct].classList.add('correct'); btns[correct].querySelector('.opt-dot').textContent='✓';
-  if(chosen!==correct){btns[chosen].classList.add('wrong');btns[chosen].querySelector('.opt-dot').textContent='✗';toast('❌ The correct one is highlighted',true);}
-  else{score+=10;correct_++;correct=correct_;toast('✅ Correct! +10',false);}
-  updateScore(); showNext();
-}
-// fix closure issue
-let correct_ = 0;
 
-// ── ARRAY WRITE ───────────────────────────────────────────────────────────────
-function renderArrayWrite(area,q){
-  area.innerHTML=`
-    <div class="q-card">
-      <div class="q-label">Read the Array</div>
-      <div class="q-text">Count rows and columns!</div>
-      <div class="q-sub">Write the multiplication equation ✏️</div>
-      <div style="margin-top:14px">${buildArray(q.rows,q.cols,q.color)}</div>
-    </div>
-    <div class="q-card" style="display:flex;flex-direction:column;gap:12px">
-      <div style="display:flex;gap:8px;align-items:flex-end">
-        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Rows ↕</div><input id="ir" type="number" class="num-input" placeholder="?"></div>
-        <div style="font-size:24px;font-weight:900;color:var(--muted);padding-bottom:8px">×</div>
-        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Cols ↔</div><input id="ic" type="number" class="num-input" placeholder="?"></div>
-        <div style="font-size:24px;font-weight:900;color:var(--muted);padding-bottom:8px">=</div>
-        <div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px">Total</div><input id="it" type="number" class="num-input" placeholder="?"></div>
-      </div>
-      <button onclick="checkArrayWrite(${q.rL},${q.cL},${q.tot})" style="background:var(--purple);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer">Check ✓</button>
-      <div id="wfb" style="display:none;text-align:center;font-size:14px;font-weight:700"></div>
-    </div>
-    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
-}
-function checkArrayWrite(cr,cc,ct){
-  if(answered)return;
-  const r=parseInt(document.getElementById('ir').value);
-  const c=parseInt(document.getElementById('ic').value);
-  const t=parseInt(document.getElementById('it').value);
-  if(!r||!c||!t){toast('⚠️ Fill all boxes!',true);return;}
-  answered=true;
-  const ok=r===cr&&c===cc&&t===ct;
-  ['ir','ic','it'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    const val=[r,c,t][i], exp=[cr,cc,ct][i];
-    el.style.borderColor=val===exp?'var(--grass)':'var(--berry)';
-    el.style.background=val===exp?'var(--grass-l)':'var(--berry-l)';
-  });
-  const fb=document.getElementById('wfb');
-  fb.style.display='block';
-  if(ok){fb.style.color='var(--grass)';fb.textContent=`🎉 Perfect! ${cr}×${cc}=${ct}`;score+=10;correct++;toast('✅ Correct! +10',false);}
-  else{fb.style.color='var(--berry)';fb.textContent=`Answer: ${cr} × ${cc} = ${ct}`;toast('❌ Almost! See the answer',true);}
-  updateScore(); showNext();
+  // reset feedback
+  const fb = document.getElementById('feedbackBar');
+  fb.className = 'feedback-bar';
+  document.getElementById('nextBtn').style.display = 'none';
 }
 
-// ── GENERIC MCQ ──────────────────────────────────────────────────────────────
-function renderMCQ(area,q){
-  const L=['A','B','C','D'];
-  area.innerHTML=`
-    <div class="q-card">
-      <div class="q-label">Choose the correct answer</div>
-      <div class="q-text" style="white-space:pre-line">${q.q}</div>
-      ${q.note?`<div class="q-sub">${q.note}</div>`:''}
-    </div>
-    <div class="options-grid" id="opts"></div>
-    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
-  const g=document.getElementById('opts');
-  q.opts.forEach((opt,i)=>{
-    const b=document.createElement('button');
-    b.className='opt-btn'; b.dataset.opt=String(opt);
-    b.innerHTML=`<div class="opt-dot">${L[i]}</div><span>${opt}</span>`;
-    b.onclick=()=>checkMCQ(b,opt,q.answer);
-    g.appendChild(b);
-  });
-}
-function checkMCQ(btn,chosen,answer){
-  if(answered)return; answered=true;
-  document.querySelectorAll('#opts .opt-btn').forEach(b=>{ if(String(b.dataset.opt)===String(answer)){b.classList.add('correct');b.querySelector('.opt-dot').textContent='✓';}});
-  if(String(chosen)===String(answer)){score+=10;correct++;toast('✅ Correct! +10',false);}
-  else{btn.classList.add('wrong');btn.querySelector('.opt-dot').textContent='✗';toast('❌ Not quite!',true);}
-  updateScore(); showNext();
-}
+function selectAnswer(btn, chosen, q) {
+  if (state.answered) return;
+  state.answered = true;
 
-// ── GENERIC WRITE ─────────────────────────────────────────────────────────────
-function renderWrite(area,q){
-  area.innerHTML=`
-    <div class="q-card">
-      <div class="q-label">Write the answer</div>
-      <div class="q-text" style="white-space:pre-line">${q.q}</div>
-      ${q.hint?`<div class="q-sub">💡 ${q.hint}</div>`:''}
-    </div>
-    <div class="q-card" style="display:flex;flex-direction:column;gap:12px">
-      <input id="wans" type="text" class="num-input" style="font-size:22px" placeholder="Your answer">
-      <button onclick="checkWriteGeneric()" style="background:var(--purple);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;cursor:pointer">Check ✓</button>
-      <div id="wfb2" style="display:none;text-align:center;font-size:14px;font-weight:700"></div>
-    </div>
-    <button class="next-btn" id="nxt" onclick="nextQ()">Next →</button>`;
-}
-function checkWriteGeneric(){
-  if(answered)return;
-  const q=questions[curIdx];
-  const inp=document.getElementById('wans');
-  const val=inp.value.trim().toLowerCase();
-  if(!val){toast('⚠️ Write your answer!',true);return;}
-  answered=true;
-  let ok=false;
-  if(q.flex){
-    // for comparisons, accept any valid answer
-    const num=parseFloat(val);
-    if(q.q.includes('>')){ok=!isNaN(num)&&num<q.answer;}
-    else if(q.q.includes('<')){ok=!isNaN(num)&&num>q.answer;}
-    else ok=String(val)===String(q.answer).toLowerCase();
-  } else if(q.display){
-    ok=val===q.display.toLowerCase()||val===q.answer.toLowerCase();
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => { b.disabled = true; });
+
+  const isCorrect = chosen === q.a;
+  const fb = document.getElementById('feedbackBar');
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'feedback-bar correct-fb';
+    document.getElementById('fbIcon').textContent = '✅';
+    document.getElementById('fbMain').textContent = 'Muito bem!';
+    document.getElementById('fbSub').textContent = '';
+    state.score++;
   } else {
-    ok=parseFloat(val)===parseFloat(q.answer)||val===String(q.answer).toLowerCase();
+    btn.classList.add('wrong');
+    // highlight correct
+    allBtns.forEach(b => {
+      if (b.textContent.includes(q.a)) b.classList.add('correct');
+    });
+    fb.className = 'feedback-bar wrong-fb';
+    document.getElementById('fbIcon').textContent = '❌';
+    document.getElementById('fbMain').textContent = 'Não foi dessa vez!';
+    document.getElementById('fbSub').textContent = `Resposta certa: ${q.a}`;
+    // save error
+    saveError(q, chosen);
   }
-  const fb=document.getElementById('wfb2');
-  fb.style.display='block';
-  inp.style.borderColor=ok?'var(--grass)':'var(--berry)';
-  inp.style.background=ok?'var(--grass-l)':'var(--berry-l)';
-  if(ok){fb.style.color='var(--grass)';fb.textContent='🎉 Correct!';score+=10;correct++;toast('✅ Correct! +10',false);}
-  else{fb.style.color='var(--berry)';fb.textContent=`Answer: ${q.display||q.answer}`;toast('❌ Almost!',true);}
-  updateScore(); showNext();
+
+  document.getElementById('nextBtn').style.display = 'block';
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
-function buildArray(rows,cols,color){
-  let h='<div style="display:flex;flex-direction:column;gap:5px">';
-  for(let r=0;r<rows;r++){
-    h+='<div class="array-row">';
-    for(let c=0;c<cols;c++) h+=`<div class="array-dot ${color}"></div>`;
-    h+='</div>';
+function nextQuestion() {
+  state.current++;
+  if (state.current >= state.questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
   }
-  return h+'</div>';
 }
-function buildMiniArray(rows,cols,color){
-  let h='<div class="mini-array">';
-  for(let r=0;r<rows;r++){
-    h+='<div class="mini-row">';
-    for(let c=0;c<cols;c++) h+=`<div class="mini-dot" style="background:var(--${color})"></div>`;
-    h+='</div>';
+
+function showResult() {
+  const total = state.questions.length;
+  const score = state.score;
+  const grade = ((score / total) * 10).toFixed(1);
+  const pct = score / total;
+
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultScore').textContent = `${score} de ${total} certas`;
+
+  let emoji = '😔';
+  if (pct >= 0.9) emoji = '🏆';
+  else if (pct >= 0.7) emoji = '⭐';
+  else if (pct >= 0.5) emoji = '💪';
+  document.getElementById('resultEmoji').textContent = emoji;
+
+  // color grade
+  const gradeEl = document.getElementById('resultGrade');
+  gradeEl.style.color = pct >= 0.7 ? 'var(--correct)' : (pct >= 0.5 ? 'var(--his)' : 'var(--wrong)');
+
+  showScreen('screenResult');
+}
+
+function retryQuiz() {
+  startQuiz(state.mode);
+}
+
+function quitQuiz() {
+  if (lastDisc) showTopics(lastDisc);
+  else showMainMenu();
+}
+
+// ════════════════════════════════════════════
+//  ERROR LOG
+// ════════════════════════════════════════════
+
+function saveError(q, chosen) {
+  const err = {
+    ts: Date.now(),
+    disc: state.disc,
+    topic: state.topic.name,
+    q: q.q,
+    chosen,
+    correct: q.a,
+  };
+  // avoid exact dupes
+  const already = state.errors.findIndex(e => e.q === q.q);
+  if (already >= 0) state.errors[already] = err;
+  else state.errors.push(err);
+  localStorage.setItem('alice_errors', JSON.stringify(state.errors));
+}
+
+function showErrors() {
+  const list = document.getElementById('errorLogList');
+  list.innerHTML = '';
+  const discColors = { mat:'tag-mat', sci:'tag-sci', his:'tag-his', geo:'tag-geo' };
+  const discNames  = { mat:'Matemática', sci:'Science', his:'História', geo:'Geografia' };
+
+  if (state.errors.length === 0) {
+    list.innerHTML = `<div class="empty-state"><span class="es-emoji">🌟</span>Nenhum erro registrado!<br>Continue estudando!</div>`;
+  } else {
+    state.errors.slice().reverse().forEach((err, i) => {
+      const item = document.createElement('div');
+      item.className = 'error-item';
+      item.innerHTML = `
+        <div class="ei-q">${err.q} <span class="tag ${discColors[err.disc] || ''}">${discNames[err.disc]||''}</span></div>
+        <div class="ei-row wrong-ans"><span class="ei-label">Você:</span>${err.chosen}</div>
+        <div class="ei-row right-ans"><span class="ei-label">Certo:</span>${err.correct}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">${err.topic}</div>
+      `;
+      list.appendChild(item);
+    });
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'clear-errors-btn';
+    clearBtn.textContent = '🗑️ Limpar todos os erros';
+    clearBtn.onclick = clearErrors;
+    list.appendChild(clearBtn);
   }
-  return h+'</div>';
-}
-function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
-function updateScore(){document.getElementById('score-display').textContent=score;}
-function showNext(){document.getElementById('nxt').classList.add('visible');}
-function nextQ(){
-  curIdx++;
-  if(curIdx>=questions.length) showResults();
-  else renderQ();
+  showScreen('screenErrors');
 }
 
-// ── RESULTS ───────────────────────────────────────────────────────────────────
-function showResults(){
-  const total=questions.length;
-  const pct=correct/total;
-  const grade=Math.round(pct*10*10)/10;
-
-  let emoji,title,sub,desc;
-  if(pct===1){emoji='🏆';title='Perfect Score!';sub='You got every one right!';}
-  else if(pct>=.8){emoji='🌟';title='Excellent!';sub='You\'re almost perfect!';}
-  else if(pct>=.6){emoji='😊';title='Good Job!';sub='Keep practicing!';}
-  else if(pct>=.4){emoji='💪';title='Keep Trying!';sub='You can do better!';}
-  else{emoji='📚';title='Need More Practice';sub='Review the topic and try again!';}
-
-  if(grade>=9)desc='Outstanding! 🏆';
-  else if(grade>=7)desc='Great work! 🌟';
-  else if(grade>=5)desc='Good effort! 😊';
-  else desc='Keep studying! 💪';
-
-  document.getElementById('res-emoji').textContent=emoji;
-  document.getElementById('res-title').textContent=title;
-  document.getElementById('res-sub').textContent=sub;
-  document.getElementById('r-correct').textContent=correct;
-  document.getElementById('r-total').textContent=total;
-  document.getElementById('r-score').textContent=score+' ⭐';
-  document.getElementById('grade-num').textContent=grade.toFixed(1);
-  document.getElementById('grade-desc').textContent=desc;
-
-  ['s1','s2','s3'].forEach(id=>document.getElementById(id).classList.remove('lit'));
-  setTimeout(()=>{
-    if(pct>=.4)document.getElementById('s1').classList.add('lit');
-    setTimeout(()=>{
-      if(pct>=.7)document.getElementById('s2').classList.add('lit');
-      setTimeout(()=>{if(pct===1)document.getElementById('s3').classList.add('lit');},300);
-    },300);
-  },400);
-
-  document.getElementById('play-again-btn').onclick=()=>startGame(curSubject,curMode,document.getElementById('game-title').textContent);
-  show('results');
+function clearErrors() {
+  state.errors = [];
+  localStorage.removeItem('alice_errors');
+  showErrors();
 }
 
-// fix array circle correct count
-function checkArrayCircle(chosen,correctIdx){
-  if(answered)return; answered=true;
-  const btns=document.querySelectorAll('#opts .opt-btn');
-  btns[correctIdx].classList.add('correct'); btns[correctIdx].querySelector('.opt-dot').textContent='✓';
-  if(chosen!==correctIdx){btns[chosen].classList.add('wrong');btns[chosen].querySelector('.opt-dot').textContent='✗';toast('❌ The correct one is highlighted',true);}
-  else{score+=10;correct++;toast('✅ Correct! +10',false);}
-  updateScore(); showNext();
-}
+// ════════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════════
 
-// ── TOAST ──────────────────────────────────────────────────────────────────────
-let toastTimer;
-function toast(msg,isWrong){
-  const t=document.getElementById('toast');
-  clearTimeout(toastTimer);
-  t.textContent=msg;
-  t.className='toast'+(isWrong?' wrong-t':'');
-  void t.offsetWidth;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+  setTimeout(() => t.classList.remove('show'), 2000);
 }
 </script>
 </body>
