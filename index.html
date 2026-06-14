@@ -407,6 +407,11 @@
   .tag-his { background: #2a2710; color: var(--his); }
   .tag-geo { background: #0f2a18; color: var(--geo); }
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4F46E5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Alice Estuda">
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 
@@ -1110,6 +1115,11 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
 }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 </script>
 </body>
 </html>
